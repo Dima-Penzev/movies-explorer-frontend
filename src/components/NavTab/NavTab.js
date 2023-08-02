@@ -6,7 +6,7 @@ export default function NavTab() {
   return (
     <header className={s.header__container}>
       <img className={s.header__image} src={logo} alt="логотип" />
-      <nav>
+      <nav className={s.header__nav}>
         <Link className={s.header__auth}>Регистрация</Link>
         <Link className={s.header__entry}>Войти</Link>
       </nav>
