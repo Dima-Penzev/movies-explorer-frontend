@@ -1,0 +1,171 @@
+.student__container {
+  padding: 70px 18px;
+}
+
+.student__title {
+  margin: 0;
+  padding-bottom: 28px;
+  margin-bottom: 60px;
+  border-bottom: 1px solid #dadada;
+  color: #fff;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.72px;
+}
+
+.student__thumb {
+  border-radius: 10px;
+  margin: 0 auto;
+  margin-bottom: 40px;
+  max-width: 292px;
+  overflow: hidden;
+}
+
+.student__photo {
+  display: block;
+  max-height: 352px;
+  transform: translateX(-8%);
+}
+
+.student__name {
+  margin: 0;
+  color: #fff;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -1.2px;
+}
+
+.student__prof {
+  margin: 0;
+  margin-top: 20px;
+  color: #fff;
+  font-family: Inter;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.student__summary {
+  margin: 0;
+  margin-top: 20px;
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.student__github {
+  text-decoration: none;
+  display: block;
+  margin-top: 40px;
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+@media (min-width: 768px) {
+  .student__container {
+    padding: 90px 50px;
+    display: grid;
+    grid-template-columns: auto 255px;
+    grid-template-areas:
+      "title title"
+      "text photo";
+  }
+
+  .student__title {
+    padding-bottom: 23px;
+    margin-bottom: 66px;
+    font-size: 22px;
+    letter-spacing: -0.88px;
+    grid-area: title;
+  }
+
+  .student__content {
+    grid-area: text;
+  }
+
+  .student__thumb {
+    grid-area: photo;
+    max-width: 255px;
+    margin-bottom: 0;
+  }
+
+  .student__photo {
+    max-height: 307px;
+  }
+
+  .student__name {
+    font-size: 40px;
+    line-height: 40px;
+    letter-spacing: -1.6px;
+  }
+
+  .student__prof {
+    font-size: 12px;
+    line-height: 18px;
+    margin-top: 17px;
+  }
+
+  .student__summary {
+    font-size: 12px;
+    line-height: 18px;
+    margin-right: 49px;
+  }
+
+  .student__github {
+    margin-top: 87px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .student__container {
+    padding: 110px 70px 100px;
+    max-width: 1280px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    grid-template-columns: auto 270px;
+  }
+
+  .student__title {
+    padding-bottom: 25px;
+  }
+
+  .student__thumb {
+    max-width: 270px;
+  }
+
+  .student__photo {
+    max-height: 327px;
+  }
+
+  .student__name {
+    font-size: 50px;
+    line-height: 58px;
+    letter-spacing: -2px;
+  }
+
+  .student__prof {
+    font-size: 18px;
+    line-height: 20px;
+  }
+
+  .student__summary {
+    font-size: 14px;
+    line-height: 22px;
+    margin-top: 26px;
+    max-width: 600px;
+  }
+
+  .student__github {
+    margin-top: 99px;
+  }
+}
