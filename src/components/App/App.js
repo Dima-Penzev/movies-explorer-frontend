@@ -2,6 +2,7 @@ import Main from "../Main/Main";
 import Register from "../Register/Register";
 import { Route, Routes } from "react-router-dom";
 import Login from "../Login/Login";
+import UnknownPath from "../UnknownPath/UnknownPath";
 import s from "./App.module.css";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<Main />} />
         <Route path="/signup" element={<Register />} />
         <Route path="/signin" element={<Login />} />
+        <Route path="/*" element={<UnknownPath />} />
       </Routes>
     </div>
   );
