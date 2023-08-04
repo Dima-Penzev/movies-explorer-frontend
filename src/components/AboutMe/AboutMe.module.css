@@ -1,5 +1,5 @@
 .student__container {
-  padding: 70px 18px;
+  padding: 70px 14px;
 }
 
 .student__title {
@@ -129,7 +129,7 @@
 @media (min-width: 1280px) {
   .student__container {
     padding: 110px 70px 100px;
-    max-width: 1280px;
+    min-width: 1280px;
     box-sizing: border-box;
     margin: 0 auto;
     grid-template-columns: auto 270px;

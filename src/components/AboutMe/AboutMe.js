@@ -1,5 +1,6 @@
 import s from "./AboutMe.module.css";
 import student from "../../images/photo_student.jpg";
+import { Link } from "react-router-dom";
 
 export default function AboutMe() {
   return (
@@ -18,9 +19,9 @@ export default function AboutMe() {
           постоянному самосовершенствованию и следую за последними тенденциями в
           мире front-end разработки.
         </p>
-        <a className={s.student__github} href="https://github.com/Dima-Penzev">
+        <Link className={s.student__github} to="https://github.com/Dima-Penzev">
           Github
-        </a>
+        </Link>
       </div>
     </div>
   );

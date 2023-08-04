@@ -1,0 +1,141 @@
+.entry__container {
+  padding: 56px 30px 0;
+  margin: 0 auto;
+  max-width: 396px;
+}
+
+.entry__logo {
+  display: block;
+  margin: 0 auto;
+  max-width: 38px;
+}
+
+.entry__title {
+  margin: 0 auto;
+  margin-top: 50px;
+  color: #fff;
+  text-align: center;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.entry__form {
+  margin: 0 auto;
+  margin-top: 80px;
+  min-height: 468px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.entry__label {
+  display: block;
+  color: #8b8b8b;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  min-height: 69px;
+}
+
+.entry__input {
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #424242;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.entry__invalid {
+  color: #ee3465;
+}
+
+.entry__error {
+  display: block;
+  margin-top: 6px;
+  color: #ee3465;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.entry__button {
+  display: block;
+  margin: 0 auto;
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  min-height: 45px;
+  width: 260px;
+  border: none;
+  border-radius: 3px;
+  background-color: #4285f4;
+}
+
+.entry__text {
+  margin: 0;
+  margin-top: 14px;
+  color: #8b8b8b;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.entry__link {
+  text-decoration: none;
+  color: #4285f4;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+@media (min-width: 768px) {
+  .entry__container {
+    padding: 0;
+  }
+
+  .entry__logo {
+    margin: 0;
+  }
+
+  .entry__title {
+    margin-top: 40px;
+    text-align: left;
+  }
+
+  .entry__form {
+    margin-top: 40px;
+    min-height: 380px;
+  }
+
+  .entry__button {
+    font-size: 14px;
+    width: 396px;
+  }
+
+  .entry__text {
+    font-size: 14px;
+    margin-top: 16px;
+  }
+
+  .entry__link {
+    font-size: 14px;
+  }
+}

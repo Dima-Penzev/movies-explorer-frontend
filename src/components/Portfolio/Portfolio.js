@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import s from "./Portfolio.module.css";
 
 export default function Portfolio() {
@@ -7,30 +8,30 @@ export default function Portfolio() {
       <ul className={s.portfolio__list}>
         <li className={s.portfolio__item}>
           Статичный сайт
-          <a
+          <Link
             className={s.portfolio__link}
-            href="https://dima-penzev.github.io/how-to-learn/index.html"
+            to="https://dima-penzev.github.io/how-to-learn/index.html"
           >
             &#8599;
-          </a>
+          </Link>
         </li>
         <li className={s.portfolio__item}>
           Адаптивный сайт{" "}
-          <a
+          <Link
             className={s.portfolio__link}
-            href="https://dima-penzev.github.io/russian-travel/index.html"
+            to="https://dima-penzev.github.io/russian-travel/index.html"
           >
             &#8599;
-          </a>
+          </Link>
         </li>
         <li className={s.portfolio__item}>
           Одностраничное приложение
-          <a
+          <Link
             className={s.portfolio__link}
-            href="https://mesto.full.nomoredomains.work"
+            to="https://mesto.full.nomoredomains.work"
           >
             &#8599;
-          </a>
+          </Link>
         </li>
       </ul>
     </div>
