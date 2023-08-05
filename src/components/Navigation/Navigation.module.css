@@ -1,40 +1,113 @@
-@media (min-width: 1280px) {
-  .navigation__link {
-    text-decoration: none;
-    color: #fff;
-    text-align: right;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 18px;
+.navigation {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-height: 100vh;
+  width: 100vw;
+  max-width: 520px;
+  box-sizing: border-box;
+  background-color: #202020;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  justify-items: center;
+  padding-top: 144px;
+  padding-bottom: 48px;
+}
+
+.navigation__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background: transparent;
+  background-image: url(../../images/cross.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+}
+
+.navigation__link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding-bottom: 9px;
+}
+
+.navigation__link:not(:first-of-type) {
+  margin-top: 15px;
+}
+
+.navigation__account {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  color: #fff;
+  text-align: right;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  align-self: end;
+}
+
+.navigation__avatar {
+  display: block;
+  width: 30px;
+  min-height: 30px;
+  text-align: center;
+  background-color: #313131;
+  border-radius: 6px;
+  padding-top: 8px;
+  margin-left: 13px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .navigation {
+    padding-top: 159px;
+    padding-bottom: 92px;
   }
 
-  .navigation__link:first-of-type {
-    margin-right: 20px;
+  .navigation__close {
+    top: 22px;
+    right: 22px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .navigation {
+    position: static;
+    min-height: 100%;
+    max-width: max-content;
+    box-sizing: border-box;
+    background-color: #202020;
+    display: block;
+    padding: 0;
+  }
+
+  .navigation__link {
+    text-align: right;
+    font-size: 14px;
+    line-height: 18px;
+    padding-bottom: 0;
+  }
+
+  .navigation__link:nth-of-type(3) {
+    margin-left: 20px;
   }
 
   .navigation__account {
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
     margin-left: 50px;
-    color: #fff;
-    text-align: right;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
     line-height: 18px;
   }
 
-  .navigation__avatar {
-    display: block;
-    width: 30px;
-    min-height: 30px;
-    text-align: center;
-    background-color: #313131;
-    border-radius: 6px;
-    padding-top: 6px;
-    margin-left: 13px;
-    box-sizing: border-box;
+  .navigation__invisible {
+    display: none;
   }
 }
