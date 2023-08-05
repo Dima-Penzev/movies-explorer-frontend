@@ -1,0 +1,40 @@
+@media (min-width: 1280px) {
+  .navigation__link {
+    text-decoration: none;
+    color: #fff;
+    text-align: right;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+  }
+
+  .navigation__link:first-of-type {
+    margin-right: 20px;
+  }
+
+  .navigation__account {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 50px;
+    color: #fff;
+    text-align: right;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+  }
+
+  .navigation__avatar {
+    display: block;
+    width: 30px;
+    min-height: 30px;
+    text-align: center;
+    background-color: #313131;
+    border-radius: 6px;
+    padding-top: 6px;
+    margin-left: 13px;
+    box-sizing: border-box;
+  }
+}

@@ -1,12 +1,15 @@
 import s from "./Promo.module.css";
 import mainLogo from "../../images/main-img.png";
+import Header from "../Header/Header";
 import NavTab from "../NavTab/NavTab";
 
 export default function Promo() {
   return (
     <div className={s.promo__background}>
       <div className={s.promo__container}>
-        <NavTab />
+        <Header>
+          <NavTab />
+        </Header>
         <div className={s.promo__content}>
           <img
             className={s.promo__image}

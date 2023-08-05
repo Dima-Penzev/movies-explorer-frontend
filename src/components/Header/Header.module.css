@@ -1,0 +1,12 @@
+.header__container {
+  padding-top: 18px;
+  padding-bottom: 18px;
+  align-self: start;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__image {
+  display: block;
+}
