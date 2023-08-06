@@ -4,9 +4,11 @@ import avatar from "../../images/icon-avatar.svg";
 
 export default function Navigation() {
   return (
-    <>
-      <button></button>
-      <nav className={s.navigation}>
+    <div>
+      <button
+        className={[s.navigation__menu, s.navigation__invisible].join(" ")}
+      ></button>
+      <nav className={s.navigation__container}>
         <button
           className={[s.navigation__close, s.navigation__invisible].join(" ")}
           type="button"
@@ -17,7 +19,11 @@ export default function Navigation() {
         >
           Главная
         </Link>
-        <Link className={s.navigation__link}>Фильмы</Link>
+        <Link
+          className={[s.navigation__link, s.navigation__linkActive].join(" ")}
+        >
+          Фильмы
+        </Link>
         <Link className={s.navigation__link}>Сохранённые фильмы</Link>
         <Link className={s.navigation__account}>
           Аккаунт{" "}
@@ -26,6 +32,6 @@ export default function Navigation() {
           </span>
         </Link>
       </nav>
-    </>
+    </div>
   );
 }

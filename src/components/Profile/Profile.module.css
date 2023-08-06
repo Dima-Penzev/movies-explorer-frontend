@@ -80,6 +80,12 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  transition: opacity 250ms ease-in;
+}
+
+.profile__edit:hover,
+.profile__edit:focus {
+  opacity: 0.7;
 }
 
 .profile__exit {
@@ -93,6 +99,12 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  transition: opacity 250ms ease-in;
+}
+
+.profile__exit:hover,
+.profile__exit:focus {
+  opacity: 0.7;
 }
 
 @media (min-width: 768px) {

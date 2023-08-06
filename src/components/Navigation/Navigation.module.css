@@ -1,17 +1,38 @@
-.navigation {
+.navigation__container {
   position: absolute;
   top: 0;
   right: 0;
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   max-width: 520px;
   box-sizing: border-box;
   background-color: #202020;
-  display: grid;
+  display: none;
   grid-template-rows: auto auto auto 1fr;
   justify-items: center;
   padding-top: 144px;
   padding-bottom: 48px;
+}
+
+.navigation__opened {
+  display: grid;
+}
+
+.navigation__menu {
+  width: 38px;
+  min-height: 38px;
+  background: transparent;
+  background-image: url(../../images/icon-menu.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  transition: opacity 250ms ease-in;
+}
+
+.navigation__menu:hover,
+.navigation__menu:focus {
+  opacity: 0.7;
 }
 
 .navigation__close {
@@ -27,6 +48,11 @@
   background-position: center;
   border: none;
   cursor: pointer;
+  transition: opacity 250ms ease-in;
+}
+.navigation__menu:hover,
+.navigation__menu:focus {
+  opacity: 0.7;
 }
 
 .navigation__link {
@@ -34,13 +60,34 @@
   color: #fff;
   font-size: 18px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: normal;
   padding-bottom: 9px;
+  transition: opacity 250ms ease-in;
+}
+
+.navigation__link:hover,
+.navigation__link:focus {
+  opacity: 0.7;
 }
 
 .navigation__link:not(:first-of-type) {
   margin-top: 15px;
+}
+
+.navigation__linkActive {
+  position: relative;
+}
+
+.navigation__linkActive::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
 }
 
 .navigation__account {
@@ -54,6 +101,12 @@
   font-weight: 500;
   line-height: 16px;
   align-self: end;
+  transition: opacity 250ms ease-in;
+}
+
+.navigation__account:hover,
+.navigation__account:focus {
+  opacity: 0.7;
 }
 
 .navigation__avatar {
@@ -69,9 +122,14 @@
 }
 
 @media (min-width: 768px) {
-  .navigation {
+  .navigation__container {
     padding-top: 159px;
     padding-bottom: 92px;
+  }
+
+  .navigation__menu {
+    width: 44px;
+    background-size: 48px;
   }
 
   .navigation__close {
@@ -81,7 +139,7 @@
 }
 
 @media (min-width: 1280px) {
-  .navigation {
+  .navigation__container {
     position: static;
     min-height: 100%;
     max-width: max-content;
@@ -96,6 +154,14 @@
     font-size: 14px;
     line-height: 18px;
     padding-bottom: 0;
+  }
+
+  .navigation__linkActive {
+    font-weight: 500;
+  }
+
+  .navigation__linkActive::after {
+    display: none;
   }
 
   .navigation__link:nth-of-type(3) {

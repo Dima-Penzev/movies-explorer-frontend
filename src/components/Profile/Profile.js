@@ -23,12 +23,18 @@ export default function Profile() {
         </label>
       </form>
       <div className={s.profile__options}>
-        <button className={s.profile__edit} type="button">
-          Редактировать
-        </button>
-        <Link className={s.profile__exit} to="/signin">
-          Выйти из аккаунта
-        </Link>
+        <div>
+          <p>При обновлении профиля произошла ошибка.</p>
+          <button type="submit">Сохранить</button>
+        </div>
+        <div>
+          <button className={s.profile__edit} type="button">
+            Редактировать
+          </button>
+          <Link className={s.profile__exit} to="/signin">
+            Выйти из аккаунта
+          </Link>
+        </div>
       </div>
     </div>
   );
