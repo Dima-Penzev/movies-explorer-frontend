@@ -5,6 +5,7 @@ import Login from "../Login/Login";
 import UnknownPath from "../UnknownPath/UnknownPath";
 import Profile from "../Profile/Profile";
 import s from "./App.module.css";
+import Movies from "../Movies/Movies";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/signup" element={<Register />} />
         <Route path="/signin" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/movies" element={<Movies />} />
         <Route path="/*" element={<UnknownPath />} />
       </Routes>
     </div>
