@@ -1,23 +1,28 @@
 .searchForm {
-  padding-top: 70px;
+  padding-top: 68px;
   padding-bottom: 63px;
-  border-bottom: 1px solid #aaa;
-  /* opacity: 0.2; */
+  border-bottom: 1px solid #424242;
 }
 
 .searchForm__container {
-  padding: 6px;
+  padding: 5px;
   box-sizing: border-box;
   min-height: 56px;
   border-radius: 8px;
-  border: 1.5px solid #aaa;
-  /* opacity: 0.2; */
+  border: 1.5px solid #424242;
   display: flex;
   align-items: center;
 }
 
 .searchForm__input {
   width: 100%;
+  color: #8b8b8b;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  background-color: transparent;
+  border: none;
 }
 
 .searchForm__button {
@@ -32,4 +37,98 @@
   border: none;
   min-height: 44px;
   min-width: 80px;
+}
+
+.searchForm__shortMovie {
+  margin: 0;
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.searchForm__switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 36px;
+  height: 20px;
+  margin-right: 13px;
+}
+
+.searchForm__switch .searchForm__checkbox {
+  display: none;
+}
+
+.searchForm__slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #343434;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.searchForm__slider::before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  left: 4px;
+  bottom: 6px;
+  background-color: #a0a0a0;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.searchForm__checkbox:checked + .searchForm__slider {
+  background-color: #2be080;
+}
+
+.searchForm__checkbox:checked + .searchForm__slider:before {
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
+  background-color: #fff;
+}
+
+@media (min-width: 768px) {
+  .searchForm {
+    padding-bottom: 51px;
+  }
+
+  .searchForm__container {
+    padding: 9px 10px 9px 22px;
+  }
+
+  .searchForm__input {
+    font-size: 18px;
+  }
+
+  .searchForm__button {
+    min-height: 52px;
+    min-width: 100px;
+  }
+
+  .searchForm__shortMovie {
+    margin-top: 26px;
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .searchForm {
+    padding-top: 70px;
+    padding-bottom: 43px;
+  }
 }

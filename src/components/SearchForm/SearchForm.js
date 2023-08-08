@@ -13,10 +13,13 @@ export default function SearchForm() {
           Поиск
         </button>
       </div>
-      <label>
-        <input type="checkbox" />
+      <p className={s.searchForm__shortMovie}>
+        <label className={s.searchForm__switch}>
+          <input className={s.searchForm__checkbox} type="checkbox" />
+          <span className={s.searchForm__slider}></span>
+        </label>
         Короткометражки
-      </label>
+      </p>
     </form>
   );
 }
