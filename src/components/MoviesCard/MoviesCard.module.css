@@ -1,7 +1,19 @@
 .moviesCard {
+  border-radius: 6px;
+  background: #222;
+  box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+.moviesCard__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
 }
 
 .moviesCard__title {
+  margin: 0;
   color: #fff;
   font-size: 12px;
   font-style: normal;
@@ -10,8 +22,8 @@
 }
 
 .moviesCard__duration {
+  margin: 0;
   color: #8b8b8b;
-  text-align: right;
   font-size: 10px;
   font-style: normal;
   font-weight: 400;
@@ -22,7 +34,65 @@
   display: block;
   width: 100%;
   max-height: 168px;
+  margin-bottom: 14px;
 }
 
 .moviesCard__button {
+  display: block;
+  margin: 0 auto;
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 11px;
+  min-width: 100px;
+  min-height: 29px;
+  border: none;
+  border-radius: 30px;
+  background: #313131;
+  cursor: pointer;
+  transition: opacity 250ms ease-in;
+}
+
+.moviesCard__button:hover,
+.moviesCard__button:focus {
+  opacity: 0.7;
+}
+
+.moviesCard__button_saved {
+  background-image: url(../../images/saved.png);
+  background-position: center;
+  font-size: 0;
+}
+
+.moviesCard__button_delete {
+  background-image: url(../../images/delete-card.png);
+  background-position: center;
+  font-size: 0;
+}
+
+@media (min-width: 768px) {
+  .moviesCard__container {
+    padding: 18px;
+  }
+
+  .moviesCard__title {
+    font-size: 15px;
+  }
+
+  .moviesCard__duration {
+    font-size: 13px;
+  }
+
+  .moviesCard__image {
+    max-height: 190px;
+    margin-bottom: 18px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .moviesCard__image {
+    max-height: 200px;
+  }
 }

@@ -4,7 +4,7 @@ import s from "../Register/Register.module.css";
 
 export default function Login() {
   return (
-    <div className={s.entry__container}>
+    <div className={s.entry}>
       <img className={s.entry__logo} src={logo} alt="логотип" />
       <h2 className={s.entry__title}>Рады видеть!</h2>
       <form className={s.entry__form} name="profile-data">

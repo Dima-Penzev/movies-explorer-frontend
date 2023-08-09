@@ -6,6 +6,7 @@ import UnknownPath from "../UnknownPath/UnknownPath";
 import Profile from "../Profile/Profile";
 import s from "./App.module.css";
 import Movies from "../Movies/Movies";
+import SavedMovies from "../SavedMovies/SavedMovies";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/signin" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/movies" element={<Movies />} />
+        <Route path="/saved-movies" element={<SavedMovies />} />
         <Route path="/*" element={<UnknownPath />} />
       </Routes>
     </div>

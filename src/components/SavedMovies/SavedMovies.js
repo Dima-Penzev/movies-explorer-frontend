@@ -1,12 +1,11 @@
-import AddMoreBtn from "../AddMoreBtn/AddMoreBtn";
-import Footer from "../Footer/Footer";
+import s from "../Movies/Movies.module.css";
 import Header from "../Header/Header";
-import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Navigation from "../Navigation/Navigation";
 import SearchForm from "../SearchForm/SearchForm";
-import s from "./Movies.module.css";
+import MoviesCardList from "../MoviesCardList/MoviesCardList";
+import Footer from "../Footer/Footer";
 
-export default function Movies() {
+export default function SavedMovies() {
   return (
     <div className={s.movies}>
       <div className={s.movies__content}>
@@ -16,7 +15,6 @@ export default function Movies() {
         <SearchForm />
       </div>
       <MoviesCardList />
-      <AddMoreBtn />
       <Footer />
     </div>
   );
