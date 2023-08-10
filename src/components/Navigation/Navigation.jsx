@@ -18,16 +18,20 @@ export default function Navigation() {
         ></button>
         <Link
           className={[s.navigation__link, s.navigation__invisible].join(" ")}
+          to="/"
         >
           Главная
         </Link>
         <Link
           className={[s.navigation__link, s.navigation__linkActive].join(" ")}
+          to="/movies"
         >
           Фильмы
         </Link>
-        <Link className={s.navigation__link}>Сохранённые фильмы</Link>
-        <Link className={s.navigation__account}>
+        <Link className={s.navigation__link} to="/saved-movies">
+          Сохранённые фильмы
+        </Link>
+        <Link className={s.navigation__account} to="/profile">
           Аккаунт{" "}
           <span className={s.navigation__avatar}>
             <img src={avatar} alt="аватар пользователя" />

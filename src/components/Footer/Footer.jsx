@@ -10,10 +10,10 @@ export default function Footer() {
         Учебный проект Яндекс.Практикум х BeatFilm.
       </h2>
       <div className={s.footer__content}>
-        <Link className={s.footer__link} to="https://practicum.yandex.ru/">
+        <Link className={s.footer__link} to="https://practicum.yandex.ru/" target="_blank">
           Яндекс.Практикум
         </Link>
-        <Link className={s.footer__link} to="https://github.com/Dima-Penzev">
+        <Link className={s.footer__link} to="https://github.com/Dima-Penzev" target="_blank">
           Github
         </Link>
       </div>

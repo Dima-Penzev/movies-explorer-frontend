@@ -13,12 +13,12 @@ export default function Profile() {
       <form id="profile" className={s.profile__form}>
         <label className={s.profile__label}>
           Имя
-          <input className={s.profile__input} type="text" name="username" />
+          <input className={[s.profile__input, s.profile__invisible].join(" ")} type="text" name="username" />
           <span>Дмитрий</span>
         </label>
         <label className={s.profile__label}>
           E-mail
-          <input className={s.profile__input} type="email" name="email" />
+          <input className={[s.profile__input, s.profile__invisible].join(" ")} type="email" name="email" />
           <span>pochta@yandex.ru</span>
         </label>
       </form>

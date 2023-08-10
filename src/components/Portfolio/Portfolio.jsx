@@ -11,6 +11,7 @@ export default function Portfolio() {
           <Link
             className={s.portfolio__link}
             to="https://dima-penzev.github.io/how-to-learn/index.html"
+            target="_blank"
           >
             &#8599;
           </Link>
@@ -20,6 +21,7 @@ export default function Portfolio() {
           <Link
             className={s.portfolio__link}
             to="https://dima-penzev.github.io/russian-travel/index.html"
+            target="_blank"
           >
             &#8599;
           </Link>
@@ -29,6 +31,7 @@ export default function Portfolio() {
           <Link
             className={s.portfolio__link}
             to="https://mesto.full.nomoredomains.work"
+            target="_blank"
           >
             &#8599;
           </Link>

@@ -19,7 +19,7 @@ export default function AboutMe() {
           постоянному самосовершенствованию и следую за последними тенденциями в
           мире front-end разработки.
         </p>
-        <Link className={s.student__github} to="https://github.com/Dima-Penzev">
+        <Link className={s.student__github} to="https://github.com/Dima-Penzev" target="_blank">
           Github
         </Link>
       </div>

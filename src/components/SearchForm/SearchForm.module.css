@@ -25,6 +25,14 @@
   border: none;
 }
 
+.searchForm__input:focus {
+  outline: none;
+}
+
+.searchForm__container:has(.searchForm__input:focus) {
+  border: 1.5px solid #4285f4;
+}
+
 .searchForm__button {
   color: #fff;
   text-align: center;
