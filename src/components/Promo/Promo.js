@@ -5,7 +5,7 @@ import NavTab from "../NavTab/NavTab";
 
 export default function Promo() {
   return (
-    <div className={s.promo__background}>
+    <div className={s.promo}>
       <div className={s.promo__container}>
         <Header>
           <NavTab />
@@ -22,7 +22,9 @@ export default function Promo() {
           <p className={s.promo__text}>
             Листайте ниже, чтобы узнать больше про этот проект и его создателя.
           </p>
-          <button className={s.promo__button}>Узнать больше</button>
+          <a href="#about-project" className={s.promo__link}>
+            Узнать больше
+          </a>
         </div>
       </div>
     </div>

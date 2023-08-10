@@ -2,7 +2,7 @@ import s from "./Techs.module.css";
 
 export default function Techs() {
   return (
-    <div className={s.techs__background}>
+    <div className={s.techs}>
       <div className={s.techs__container}>
         <h2 className={s.techs__title}>Технологии</h2>
         <p className={s.techs__subtitle}>7 технологий</p>

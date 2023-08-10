@@ -1,5 +1,8 @@
-.footer__container {
+.footer {
   padding: 59px 10px 20px;
+  width: 100%;
+  max-width: 1280px;
+  box-sizing: border-box;
 }
 
 .footer__title {
@@ -42,7 +45,7 @@
 }
 
 @media (min-width: 768px) {
-  .footer__container {
+  .footer {
     padding: 57px 30px 20px;
     display: grid;
     grid-template-areas:
@@ -85,10 +88,7 @@
 }
 
 @media (min-width: 1280px) {
-  .footer__container {
+  .footer {
     padding: 82px 70px 20px;
-    width: 100%;
-    max-width: 1280px;
-    box-sizing: border-box;
   }
 }

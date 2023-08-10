@@ -1,3 +1,7 @@
+.techs {
+  width: 100%;
+}
+
 .techs__container {
   padding: 70px 18px;
 }
@@ -66,7 +70,7 @@
 }
 
 @media (min-width: 768px) {
-  .techs__background {
+  .techs {
     background-color: #272727;
   }
   .techs__container {

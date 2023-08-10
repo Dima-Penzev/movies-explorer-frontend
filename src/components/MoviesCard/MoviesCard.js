@@ -1,5 +1,4 @@
 import s from "./MoviesCard.module.css";
-// import pic_1 from "../../temporaryImages/pic_1.jpg";
 
 export default function MoviesCard({ image }) {
   return (

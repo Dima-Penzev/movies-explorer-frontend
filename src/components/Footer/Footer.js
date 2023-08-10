@@ -5,7 +5,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className={s.footer__container}>
+    <footer className={s.footer}>
       <h2 className={s.footer__title}>
         Учебный проект Яндекс.Практикум х BeatFilm.
       </h2>

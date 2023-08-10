@@ -2,7 +2,7 @@ import s from "./AboutProject.module.css";
 
 export default function AboutProject() {
   return (
-    <div className={s.about__container}>
+    <div id="about-project" className={s.about}>
       <h2 className={s.about__title}>О проекте</h2>
       <div className={s.about__content}>
         <div className={s.about__inner}>

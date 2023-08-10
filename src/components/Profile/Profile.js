@@ -23,7 +23,7 @@ export default function Profile() {
         </label>
       </form>
       <div className={s.profile__container}>
-        <div>
+        <div className={s.profile__invisible}>
           <p className={s.profile__error}>
             При обновлении профиля произошла ошибка.
           </p>
@@ -31,7 +31,7 @@ export default function Profile() {
             Сохранить
           </button>
         </div>
-        <div className={s.profile__invisible}>
+        <div>
           <button className={s.profile__edit} type="button">
             Редактировать
           </button>

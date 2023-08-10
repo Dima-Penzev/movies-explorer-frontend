@@ -1,10 +1,20 @@
-.header__container {
+.header {
   padding-top: 18px;
   padding-bottom: 18px;
   align-self: start;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.header__link {
+  cursor: pointer;
+  transition: opacity 250ms easy-in;
+}
+
+.header__link:hover,
+.header__link:focus {
+  opacity: 0.7;
 }
 
 .header__image {

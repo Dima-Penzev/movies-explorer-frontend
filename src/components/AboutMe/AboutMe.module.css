@@ -1,4 +1,4 @@
-.student__container {
+.student {
   padding: 70px 14px;
 }
 
@@ -69,10 +69,16 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  transition: opacity 250ms easy-in;
+}
+
+.student__github:hover,
+.student__github:focus {
+  opacity: 0.7;
 }
 
 @media (min-width: 768px) {
-  .student__container {
+  .student {
     padding: 90px 50px;
     display: grid;
     grid-template-columns: auto 255px;
@@ -127,7 +133,7 @@
 }
 
 @media (min-width: 1280px) {
-  .student__container {
+  .student {
     padding: 110px 70px 100px;
     min-width: 1280px;
     box-sizing: border-box;

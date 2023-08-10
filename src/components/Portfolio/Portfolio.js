@@ -3,7 +3,7 @@ import s from "./Portfolio.module.css";
 
 export default function Portfolio() {
   return (
-    <div className={s.portfolio__container}>
+    <div className={s.portfolio}>
       <h2 className={s.portfolio__title}>Портфолио</h2>
       <ul className={s.portfolio__list}>
         <li className={s.portfolio__item}>

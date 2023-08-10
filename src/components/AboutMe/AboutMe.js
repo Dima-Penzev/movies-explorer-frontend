@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function AboutMe() {
   return (
-    <div className={s.student__container}>
+    <div className={s.student}>
       <h2 className={s.student__title}>Студент</h2>
       <div className={s.student__thumb}>
         <img className={s.student__photo} src={student} alt="фото студента" />

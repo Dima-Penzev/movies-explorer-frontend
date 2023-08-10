@@ -1,4 +1,4 @@
-.unknown__container {
+.unknown {
   padding-bottom: 30px;
   min-height: 100vh;
   box-sizing: border-box;
@@ -44,7 +44,7 @@
 }
 
 @media (min-width: 768px) {
-  .unknown__container {
+  .unknown {
     padding-bottom: 0;
     grid-template-rows: auto auto;
   }

@@ -4,8 +4,10 @@ import avatar from "../../images/icon-avatar.svg";
 
 export default function Navigation() {
   return (
-    <div>
+    <div className={s.navigation}>
       <button
+        aria-label="меню"
+        type="button"
         className={[s.navigation__menu, s.navigation__invisible].join(" ")}
       ></button>
       <nav className={s.navigation__container}>
