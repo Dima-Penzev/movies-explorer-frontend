@@ -1,8 +1,8 @@
-.addMoreBtn {
-  padding-bottom: 80px;
+.add-more-btn {
+  padding-bottom: 100px;
 }
 
-.addMoreBtn__element {
+.add-more-btn__element {
   display: block;
   color: #fff;
   text-align: center;
@@ -15,28 +15,18 @@
   background-color: #2f2f2f;
   border: none;
   min-height: 36px;
-  min-width: 300px;
   margin: 0 auto;
+  width: 100%;
   transition: opacity 250ms ease-in;
 }
 
-.addMoreBtn__element:hover,
-.addMoreBtn__element:focus {
+.add-more-btn__element:hover,
+.add-more-btn__element:focus {
   opacity: 0.7;
 }
 
-@media (min-width: 768px) {
-  .addMoreBtn {
-    padding: 0 30px 80px;
-  }
-
-  .addMoreBtn__element {
-    width: 100%;
-  }
-}
-
 @media (min-width: 1280px) {
-  .addMoreBtn {
-    padding: 0 70px 80px;
+  .add-more-btn {
+    padding-bottom: 76px;
   }
 }

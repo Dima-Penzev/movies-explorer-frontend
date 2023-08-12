@@ -4,19 +4,21 @@ import Header from "../Header/Header";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Navigation from "../Navigation/Navigation";
 import SearchForm from "../SearchForm/SearchForm";
-import s from "./Movies.module.css";
+import "./Movies.css";
 
 export default function Movies() {
   return (
-    <div className={s.movies}>
-      <div className={s.movies__content}>
+    <div className="movies">
+      <header className="movies__header">
         <Header>
           <Navigation />
         </Header>
+      </header>
+      <main className="movies__container">
         <SearchForm />
-      </div>
-      <MoviesCardList />
-      <AddMoreBtn />
+        <MoviesCardList />
+        <AddMoreBtn />
+      </main>
       <Footer />
     </div>
   );

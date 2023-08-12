@@ -76,11 +76,11 @@
   margin-top: 15px;
 }
 
-.navigation__linkActive {
+.navigation__link_active {
   position: relative;
 }
 
-.navigation__linkActive::after {
+.navigation__link_active::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -157,11 +157,11 @@
     padding-bottom: 0;
   }
 
-  .navigation__linkActive {
+  .navigation__link_active {
     font-weight: 500;
   }
 
-  .navigation__linkActive::after {
+  .navigation__link_active::after {
     display: none;
   }
 

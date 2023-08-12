@@ -1,39 +1,44 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import s from "./Navigation.module.css";
+import "./Navigation.css";
 import avatar from "../../images/icon-avatar.svg";
 
 export default function Navigation() {
+  const [menuOpened, setMenuOpened] = useState(false);
+
   return (
-    <div className={s.navigation}>
+    <div className="navigation">
       <button
         aria-label="меню"
         type="button"
-        className={[s.navigation__menu, s.navigation__invisible].join(" ")}
+        className="navigation__menu navigation__invisible"
+        onClick = {() => {setMenuOpened(true)}}
       ></button>
-      <nav className={s.navigation__container}>
+      <nav className={`navigation__container ${menuOpened && "navigation__opened"}`}>
         <button
-          className={[s.navigation__close, s.navigation__invisible].join(" ")}
+          className="navigation__close navigation__invisible"
           type="button"
           aria-label="закрыть"
+          onClick = {() => {setMenuOpened(false)}}
         ></button>
         <Link
-          className={[s.navigation__link, s.navigation__invisible].join(" ")}
+          className="navigation__link navigation__invisible"
           to="/"
         >
           Главная
         </Link>
         <Link
-          className={[s.navigation__link, s.navigation__linkActive].join(" ")}
+          className="navigation__link navigation__link_active"
           to="/movies"
         >
           Фильмы
         </Link>
-        <Link className={s.navigation__link} to="/saved-movies">
+        <Link className="navigation__link" to="/saved-movies">
           Сохранённые фильмы
         </Link>
-        <Link className={s.navigation__account} to="/profile">
-          Аккаунт{" "}
-          <span className={s.navigation__avatar}>
+        <Link className="navigation__account" to="/profile">
+          Аккаунт
+          <span className="navigation__avatar">
             <img src={avatar} alt="аватар пользователя" />
           </span>
         </Link>

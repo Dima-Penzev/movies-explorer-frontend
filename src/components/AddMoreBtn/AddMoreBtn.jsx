@@ -1,9 +1,9 @@
-import s from "./AddMoreBtn.module.css";
+import "./AddMoreBtn.css";
 
 export default function AddMoreBtn() {
   return (
-    <div className={s.addMoreBtn}>
-      <button className={s.addMoreBtn__element}>Ещё</button>
+    <div className="add-more-btn">
+      <button className="add-more-btn__element" type="button">Ещё</button>
     </div>
   );
 }

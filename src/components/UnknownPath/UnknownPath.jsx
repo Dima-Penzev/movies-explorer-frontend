@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
-import s from "./UnknownPath.module.css";
+import "./UnknownPath.css";
 
 export default function UnknownPath() {
   return (
-    <div className={s.unknown}>
-      <div className={s.unknown__content}>
-        <h2 className={s.unknown__title}>404</h2>
-        <p className={s.unknown__text}>Страница не найдена</p>
+    <div className="unknown">
+      <div className="unknown__content">
+        <h2 className="unknown__title">404</h2>
+        <p className="unknown__text">Страница не найдена</p>
       </div>
-      <Link className={s.unknown__link} to="/">
+      <Link className="unknown__link" to="/">
         Назад
       </Link>
     </div>

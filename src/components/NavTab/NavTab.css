@@ -1,8 +1,8 @@
-.navTab {
+.nav-tab {
   margin-bottom: 3px;
 }
 
-.navTab__auth {
+.nav-tab__auth {
   text-decoration: none;
   margin-right: 14px;
   color: #fff;
@@ -12,11 +12,11 @@
   line-height: 16px;
   transition: opacity 250ms ease-in;
 }
-.navTab__auth:hover,
-.navTab__auth:focus {
+.nav-tab__auth:hover,
+.nav-tab__auth:focus {
   opacity: 0.7;
 }
-.navTab__entry {
+.nav-tab__entry {
   text-decoration: none;
   padding: 7px 12px;
   color: #000;
@@ -29,18 +29,18 @@
   transition: opacity 250ms ease-in;
 }
 
-.navTab__entry:hover,
-.navTab__auth:focus {
+.nav-tab__entry:hover,
+.nav-tab__auth:focus {
   opacity: 0.7;
 }
 
 @media (min-width: 768px) {
-  .navTab__auth {
+  .nav-tab__auth {
     font-size: 12px;
     margin-right: 30px;
   }
 
-  .navTab__entry {
+  .nav-tab__entry {
     font-size: 12px;
     padding: 8px 20px;
   }

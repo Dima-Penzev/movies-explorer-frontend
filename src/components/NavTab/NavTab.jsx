@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import s from "./NavTab.module.css";
+import "./NavTab.css";
 
 export default function NavTab() {
   return (
-    <nav className={s.navTab}>
-      <Link className={s.navTab__auth} to="/signup">
+    <nav className="nav-tab">
+      <Link className="nav-tab__auth" to="/signup">
         Регистрация
       </Link>
-      <Link className={s.navTab__entry} to="/signin">
+      <Link className="nav-tab__entry" to="/signin">
         Войти
       </Link>
     </nav>

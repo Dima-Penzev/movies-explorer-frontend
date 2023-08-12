@@ -1,39 +1,39 @@
 import { Link } from "react-router-dom";
-import logo from "../../images/logo.png";
-import s from "./Register.module.css";
+import logo from "../../images/logo.svg";
+import "./Register.css";
 
 export default function Register() {
   return (
-    <div className={s.entry}>
-      <Link className={s.entry__logoLink} to="/">
-        <img className={s.entry__logo} src={logo} alt="логотип" />
+    <div className="entry">
+      <Link className="entry__logo-link" to="/">
+        <img className="entry__logo" src={logo} alt="логотип" />
       </Link>
-      <h2 className={s.entry__title}>Добро пожаловать!</h2>
-      <form className={s.entry__form} name="profile-data">
+      <h2 className="entry__title">Добро пожаловать!</h2>
+      <form className="entry__form" name="profile-data">
         <div>
-          <label className={s.entry__label}>
+          <label className="entry__label">
             Имя
-            <input className={s.entry__input} type="text" name="username" />
-            <span className={s.entry__error}>Что-то пошло не так...</span>
+            <input className="entry__input" placeholder="Имя" type="text" name="username" minLength="2" maxLength="30" required />
+            <span className="entry__error">Что-то пошло не так...</span>
           </label>
-          <label className={s.entry__label}>
+          <label className="entry__label">
             E-mail
-            <input className={s.entry__input} type="email" name="email" />
-            <span className={s.entry__error}>Что-то пошло не так...</span>
+            <input className="entry__input" placeholder="E-mail" type="email" name="email" required />
+            <span className="entry__error">Что-то пошло не так...</span>
           </label>
-          <label className={s.entry__label}>
+          <label className="entry__label">
             Пароль
-            <input className={s.entry__input} type="password" name="password" />
-            <span className={s.entry__error}>Что-то пошло не так...</span>
+            <input className="entry__input" placeholder="Пароль" type="password" name="password" minLength="8" required />
+            <span className="entry__error">Что-то пошло не так...</span>
           </label>
         </div>
-        <Link className={s.entry__button} to="/signin">
+        <Link className="entry__button" to="/signin">
           Зарегистрироваться
         </Link>
       </form>
-      <p className={s.entry__text}>
+      <p className="entry__text">
         Уже зарегестрированы?{" "}
-        <Link className={s.entry__link} to="/signin">
+        <Link className="entry__link" to="/signin">
           Войти
         </Link>
       </p>

@@ -10,13 +10,13 @@
   grid-template-rows: auto auto 1fr auto;
 }
 
-.entry__logoLink {
+.entry__logo-link {
   cursor: pointer;
   transition: opacity 250ms easy-in;
 }
 
-.entry__logoLink:hover,
-.entry__logoLink:focus {
+.entry__logo-link:hover,
+.entry__logo-link:focus {
   opacity: 0.7;
 }
 
@@ -63,8 +63,7 @@
   background: transparent;
   border: none;
   border-bottom: 1px solid #424242;
-  padding-top: 5px;
-  padding-bottom: 10px;
+  padding: 5px 0 10px;
   color: #fff;
   font-size: 14px;
   font-style: normal;

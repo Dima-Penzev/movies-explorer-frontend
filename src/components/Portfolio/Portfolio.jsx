@@ -1,42 +1,42 @@
 import { Link } from "react-router-dom";
-import s from "./Portfolio.module.css";
+import "./Portfolio.css";
 
 export default function Portfolio() {
   return (
-    <div className={s.portfolio}>
-      <h2 className={s.portfolio__title}>Портфолио</h2>
-      <ul className={s.portfolio__list}>
-        <li className={s.portfolio__item}>
-          Статичный сайт
+    <section className="portfolio">
+      <h2 className="portfolio__title">Портфолио</h2>
+      <ul className="portfolio__list">
+        <li className="portfolio__item">
           <Link
-            className={s.portfolio__link}
+            className="portfolio__link"
             to="https://dima-penzev.github.io/how-to-learn/index.html"
             target="_blank"
-          >
-            &#8599;
+            >
+            Статичный сайт
+            <span>&#8599;</span>
           </Link>
         </li>
-        <li className={s.portfolio__item}>
-          Адаптивный сайт{" "}
+        <li className="portfolio__item">
           <Link
-            className={s.portfolio__link}
+            className="portfolio__link"
             to="https://dima-penzev.github.io/russian-travel/index.html"
             target="_blank"
-          >
-            &#8599;
+            >
+            Адаптивный сайт
+            <span>&#8599;</span>
           </Link>
         </li>
-        <li className={s.portfolio__item}>
-          Одностраничное приложение
+        <li className="portfolio__item">
           <Link
-            className={s.portfolio__link}
+            className="portfolio__link"
             to="https://mesto.full.nomoredomains.work"
             target="_blank"
-          >
-            &#8599;
+            >
+            Одностраничное приложение
+            <span>&#8599;</span>
           </Link>
         </li>
       </ul>
-    </div>
+    </section>
   );
 }
