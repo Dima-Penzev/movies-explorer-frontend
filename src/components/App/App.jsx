@@ -9,10 +9,12 @@ import "./App.css";
 import Movies from "../Movies/Movies";
 import SavedMovies from "../SavedMovies/SavedMovies";
 import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import * as auth from "../../utils/MainApi";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState({ name: "", email: "" });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +23,7 @@ function App() {
       .then((res) => {
         if (res) {
           console.log(res);
+          setCurrentUser({ name: res.data.name, email: res.data.email });
           setLoggedIn(true);
           navigate("/movies", { replace: true });
         }
@@ -54,35 +57,54 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  function handelUpdateUserData(userName, userEmail) {
+    auth
+      .updateUserData(userName, userEmail)
+      .then((res) => {
+        console.log(res);
+        setCurrentUser({ name: res.data.name, email: res.data.email });
+      })
+      .catch((err) => console.log(err));
+  }
+
   return (
     <div className="app">
-      <Routes>
-        <Route path="/" element={<Main />} />
-        <Route
-          path="/signup"
-          element={<Register onRegister={handleRegister} />}
-        />
-        <Route path="/signin" element={<Login onLogin={handleLogin} />} />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRouteElement element={Profile} loggedIn={loggedIn} />
-          }
-        />
-        <Route
-          path="/movies"
-          element={
-            <ProtectedRouteElement element={Movies} loggedIn={loggedIn} />
-          }
-        />
-        <Route
-          path="/saved-movies"
-          element={
-            <ProtectedRouteElement element={SavedMovies} loggedIn={loggedIn} />
-          }
-        />
-        <Route path="/*" element={<UnknownPath />} />
-      </Routes>
+      <CurrentUserContext.Provider value={currentUser}>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route
+            path="/signup"
+            element={<Register onRegister={handleRegister} />}
+          />
+          <Route path="/signin" element={<Login onLogin={handleLogin} />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRouteElement
+                element={Profile}
+                loggedIn={loggedIn}
+                onUpdateUser={handelUpdateUserData}
+              />
+            }
+          />
+          <Route
+            path="/movies"
+            element={
+              <ProtectedRouteElement element={Movies} loggedIn={loggedIn} />
+            }
+          />
+          <Route
+            path="/saved-movies"
+            element={
+              <ProtectedRouteElement
+                element={SavedMovies}
+                loggedIn={loggedIn}
+              />
+            }
+          />
+          <Route path="/*" element={<UnknownPath />} />
+        </Routes>
+      </CurrentUserContext.Provider>
     </div>
   );
 }

@@ -58,3 +58,15 @@ export function getContent() {
     credentials: "include",
   });
 }
+
+export function updateUserData(name, email) {
+  return requestData(`${BASE_URL}/users/me`, {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ name, email }),
+  });
+}
