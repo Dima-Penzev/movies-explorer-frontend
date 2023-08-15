@@ -96,7 +96,6 @@
   margin: 0 auto;
   color: #fff;
   box-sizing: border-box;
-  padding-top: 15px;
   text-align: center;
   font-size: 12px;
   font-style: normal;
@@ -166,7 +165,6 @@
   }
 
   .entry__button {
-    padding-top: 13px;
     font-size: 14px;
   }
 
