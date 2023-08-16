@@ -4,9 +4,9 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Header from "../Header/Header";
 import "./Profile.css";
 import Navigation from "../Navigation/Navigation";
-// import Preloader from "../Preloader/Preloader";
+import Preloader from "../Preloader/Preloader";
 
-export default function Profile({ onUpdateUser }) {
+export default function Profile({ onUpdateUser, status }) {
   const { name, email } = useContext(CurrentUserContext);
   const [formName, setFormName] = useState("");
   const [formEmail, setFormEmail] = useState("");
@@ -37,6 +37,10 @@ export default function Profile({ onUpdateUser }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onUpdateUser(formName, formEmail);
+
+    if (status === "resolved") {
+      setShowEditor(false);
+    }
   };
 
   return (
@@ -59,6 +63,7 @@ export default function Profile({ onUpdateUser }) {
             maxLength="30"
             value={formName}
             onChange={handleChange}
+            ref={(input) => input && input.focus()}
           />
           <span className={`${showEditor && "profile__invisible"}`}>
             {name}
@@ -79,12 +84,18 @@ export default function Profile({ onUpdateUser }) {
           </span>
         </label>
       </form>
-      {/* <Preloader /> */}
+      <div className="profile__preloader">
+        {status === "pending" && <Preloader />}
+      </div>
       <div className="profile__container">
-        <div className={`${!showEditor && "profile__invisible"}`}>
-          <p className="profile__error">
-            При обновлении профиля произошла ошибка.
-          </p>
+        <div
+          className={`profile__update ${!showEditor && "profile__invisible"}`}
+        >
+          {status === "regected" && (
+            <p className="profile__error">
+              При обновлении профиля произошла ошибка.
+            </p>
+          )}
           <button className="profile__btn-save" form="profile" type="submit">
             Сохранить
           </button>

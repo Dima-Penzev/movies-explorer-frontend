@@ -4,7 +4,7 @@
   width: 100%;
   box-sizing: border-box;
   display: grid;
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto auto 1fr 1fr;
 }
 
 .profile__title {
@@ -16,6 +16,13 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.profile__update {
+  min-height: 79px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .profile__form {
@@ -63,6 +70,13 @@
 
 .profile__invisible {
   display: none;
+}
+
+.profile__preloader {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  min-height: 140px;
 }
 
 .profile__container {
@@ -162,7 +176,7 @@
   }
 
   .profile__container {
-    margin-top: 193px;
+    margin-top: 49px;
   }
 
   .profile__btn-save {
@@ -195,7 +209,7 @@
   }
 
   .profile__container {
-    margin-top: 203px;
+    margin-top: 59px;
   }
 
   .profile__edit {

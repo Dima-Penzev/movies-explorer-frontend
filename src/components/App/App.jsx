@@ -11,10 +11,13 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import * as auth from "../../utils/MainApi";
+import { getMovies } from "../../utils/MoviesApi";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({ name: "", email: "" });
+  const [moviesList, setMoviesList] = useState(null);
+  const [status, setStatus] = useState("idle");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +36,18 @@ function App() {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (loggedIn) {
+      getMovies()
+        .then((res) => {
+          setMoviesList(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [loggedIn]);
 
   function handleRegister(name, email, password) {
     auth
@@ -58,13 +73,18 @@ function App() {
   }
 
   function handelUpdateUserData(userName, userEmail) {
+    setStatus("pending");
+
     auth
       .updateUserData(userName, userEmail)
       .then((res) => {
-        console.log(res);
+        setStatus("resolved");
         setCurrentUser({ name: res.data.name, email: res.data.email });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setStatus("rejected");
+        console.log(err);
+      });
   }
 
   return (
@@ -84,13 +104,18 @@ function App() {
                 element={Profile}
                 loggedIn={loggedIn}
                 onUpdateUser={handelUpdateUserData}
+                status={status}
               />
             }
           />
           <Route
             path="/movies"
             element={
-              <ProtectedRouteElement element={Movies} loggedIn={loggedIn} />
+              <ProtectedRouteElement
+                element={Movies}
+                loggedIn={loggedIn}
+                movies={moviesList}
+              />
             }
           />
           <Route
