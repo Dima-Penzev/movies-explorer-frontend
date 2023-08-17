@@ -2,13 +2,12 @@ import { useState, useEffect } from "react";
 import "./SearchForm.css";
 
 export default function SearchForm({ onSearchMovies, onShortMovies }) {
-  const [formFilm, setFormFilm] = useState("");
-  const [checked, setChecked] = useState(false);
-
-  useEffect(() => {
-    setFormFilm("");
-    // setChecked(false);
-  }, []);
+  const [formFilm, setFormFilm] = useState(
+    localStorage.getItem("movie-query") ?? ""
+  );
+  const [checked, setChecked] = useState(
+    JSON.parse(localStorage.getItem("short-movie-checked")) ?? false
+  );
 
   useEffect(() => {
     onShortMovies(checked);
@@ -57,7 +56,7 @@ export default function SearchForm({ onSearchMovies, onShortMovies }) {
             className="search-form__checkbox"
             type="checkbox"
             name="short-movies"
-            // value={checked}
+            checked={checked}
             onChange={handleChange}
           />
           <span className="search-form__slider"></span>

@@ -4,16 +4,22 @@ import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Navigation from "../Navigation/Navigation";
-// import Preloader from "../Preloader/Preloader";
+import Preloader from "../Preloader/Preloader";
 import SearchForm from "../SearchForm/SearchForm";
 import { getMovies } from "../../utils/MoviesApi";
 import "./Movies.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Movies() {
-  const [foundMovies, setFoundMovies] = useState([]);
+  const [foundMovies, setFoundMovies] = useState(
+    JSON.parse(localStorage.getItem("movies-list")) ?? []
+  );
   const [renderedMovies, setRenderedMovies] = useState([]);
-  const [movieQuery, setMovieQuery] = useState("");
+  const [movieQuery, setMovieQuery] = useState(null);
   const [checked, setChecked] = useState(false);
+  const [status, setStatus] = useState("idle");
+  const notifyEmptyQuery = () => toast.error("Нужно ввести ключевое слово.");
 
   console.log(foundMovies);
   console.log(renderedMovies);
@@ -35,26 +41,21 @@ export default function Movies() {
   }
 
   function handleSearchMovies(query, shortMovieChecked) {
+    if (query === "") {
+      notifyEmptyQuery();
+      return;
+    }
     setMovieQuery(query);
     setChecked(shortMovieChecked);
+    localStorage.setItem("movie-query", query);
+    localStorage.setItem("short-movie-checked", shortMovieChecked);
   }
 
   function handleShortMovies(shortMovieChecked) {
     setChecked(shortMovieChecked);
-    // if (shortMovieChecked) {
-    //   const shortMovies = foundMovies.filter(({ duration }) => duration <= 40);
-
-    //   if (!shortMovies.length) {
-    //     return;
-    //   } else {
-    //     setRenderedMovies(shortMovies);
-    //   }
-    // } else {
-    //   setRenderedMovies(renderedMovies);
-    // }
+    localStorage.setItem("short-movie-checked", shortMovieChecked);
   }
 
-  console.log(checked);
   useEffect(() => {
     let firstBundle;
 
@@ -111,8 +112,10 @@ export default function Movies() {
     };
   }, [foundMovies, renderedMovies]);
 
+  console.log(checked);
   useEffect(() => {
     if (movieQuery) {
+      setStatus("pending");
       const normalizedQuery = movieQuery.toLowerCase();
 
       getMovies()
@@ -133,7 +136,14 @@ export default function Movies() {
               }
             }
           );
-          setFoundMovies(filteredMovies);
+
+          if (!filteredMovies.length) {
+            setStatus("notFound");
+          } else {
+            setStatus("resolved");
+            setFoundMovies(filteredMovies);
+            localStorage.setItem("movies-list", JSON.stringify(filteredMovies));
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -153,13 +163,30 @@ export default function Movies() {
           onSearchMovies={handleSearchMovies}
           onShortMovies={handleShortMovies}
         />
-        <MoviesCardList movies={renderedMovies} />
-        {/* <Preloader /> */}
+        {status === "pending" && <Preloader />}
+        {status === "notFound" && (
+          <h2 className="movies__not-found">Ничего не найдено</h2>
+        )}
+        {(status === "resolved" || renderedMovies.length) && (
+          <MoviesCardList movies={renderedMovies} />
+        )}
         {renderedMovies && renderedMovies.length < foundMovies.length && (
           <AddMoreBtn onAddMovies={handleAddMovies} />
         )}
       </main>
       <Footer />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }
