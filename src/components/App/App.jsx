@@ -11,12 +11,12 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import * as auth from "../../utils/MainApi";
-import { getMovies } from "../../utils/MoviesApi";
+// import { getMovies } from "../../utils/MoviesApi";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({ name: "", email: "" });
-  const [moviesList, setMoviesList] = useState(null);
+  // const [moviesList, setMoviesList] = useState([]);
   const [status, setStatus] = useState("idle");
   const navigate = useNavigate();
 
@@ -25,7 +25,6 @@ function App() {
       .getContent()
       .then((res) => {
         if (res) {
-          console.log(res);
           setCurrentUser({ name: res.data.name, email: res.data.email });
           setLoggedIn(true);
           navigate("/movies", { replace: true });
@@ -37,24 +36,23 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (loggedIn) {
-      getMovies()
-        .then((res) => {
-          setMoviesList(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [loggedIn]);
+  // useEffect(() => {
+  //   if (loggedIn) {
+  //     getMovies()
+  //       .then((res) => {
+  //         setMoviesList(res);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }, [loggedIn]);
 
   function handleRegister(name, email, password) {
     auth
       .register(name, email, password)
-      .then((res) => {
+      .then(() => {
         navigate("/signin", { replace: true });
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -64,9 +62,8 @@ function App() {
   function handleLogin(userEmail, userPassword) {
     auth
       .login(userEmail, userPassword)
-      .then((res) => {
+      .then(() => {
         setLoggedIn(true);
-        console.log(res);
         navigate("/movies", { replace: true });
       })
       .catch((err) => console.log(err));
@@ -114,7 +111,7 @@ function App() {
               <ProtectedRouteElement
                 element={Movies}
                 loggedIn={loggedIn}
-                movies={moviesList}
+                // movies={moviesList}
               />
             }
           />
