@@ -11,12 +11,10 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import * as auth from "../../utils/MainApi";
-// import { getMovies } from "../../utils/MoviesApi";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({ name: "", email: "" });
-  // const [moviesList, setMoviesList] = useState([]);
   const [status, setStatus] = useState("idle");
   const navigate = useNavigate();
 
@@ -35,18 +33,6 @@ function App() {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-  //   if (loggedIn) {
-  //     getMovies()
-  //       .then((res) => {
-  //         setMoviesList(res);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // }, [loggedIn]);
 
   function handleRegister(name, email, password) {
     auth
@@ -108,11 +94,7 @@ function App() {
           <Route
             path="/movies"
             element={
-              <ProtectedRouteElement
-                element={Movies}
-                loggedIn={loggedIn}
-                // movies={moviesList}
-              />
+              <ProtectedRouteElement element={Movies} loggedIn={loggedIn} />
             }
           />
           <Route

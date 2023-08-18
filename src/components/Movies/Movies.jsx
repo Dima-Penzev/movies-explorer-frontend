@@ -7,6 +7,7 @@ import Navigation from "../Navigation/Navigation";
 import Preloader from "../Preloader/Preloader";
 import SearchForm from "../SearchForm/SearchForm";
 import { getMovies } from "../../utils/MoviesApi";
+import * as auth from "../../utils/MainApi";
 import "./Movies.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,13 +17,13 @@ export default function Movies() {
     JSON.parse(localStorage.getItem("movies-list")) ?? []
   );
   const [renderedMovies, setRenderedMovies] = useState([]);
-  const [movieQuery, setMovieQuery] = useState(null);
+  const [movieQuery, setMovieQuery] = useState(
+    localStorage.getItem("movie-query") ?? null
+  );
+  const [savedMovieIdsArr, setSavedMoviesIdsArr] = useState([]);
   const [checked, setChecked] = useState(false);
   const [status, setStatus] = useState("idle");
   const notifyEmptyQuery = () => toast.error("Нужно ввести ключевое слово.");
-
-  console.log(foundMovies);
-  console.log(renderedMovies);
 
   function handleAddMovies() {
     if (document.documentElement.clientWidth < 1280) {
@@ -46,14 +47,42 @@ export default function Movies() {
       return;
     }
     setMovieQuery(query);
-    setChecked(shortMovieChecked);
     localStorage.setItem("movie-query", query);
-    localStorage.setItem("short-movie-checked", shortMovieChecked);
+    handleShortMovies(shortMovieChecked);
   }
 
   function handleShortMovies(shortMovieChecked) {
     setChecked(shortMovieChecked);
     localStorage.setItem("short-movie-checked", shortMovieChecked);
+  }
+
+  function toggleLikeMovie(movieId, movieLike) {
+    if (!movieLike) {
+      const likedMovie = renderedMovies.find(({ id }) => movieId === id);
+
+      auth
+        .saveMovie(likedMovie)
+        .then(() => {
+          setSavedMoviesIdsArr((savedMovieIdsArr) => [
+            movieId,
+            ...savedMovieIdsArr,
+          ]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      auth
+        .deleteMovie(movieId)
+        .then(() => {
+          setSavedMoviesIdsArr((savedMovieIdsArr) =>
+            savedMovieIdsArr.filter((id) => id !== movieId)
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   useEffect(() => {
@@ -70,6 +99,7 @@ export default function Movies() {
       firstBundle = foundMovies && foundMovies.slice(0, 12);
     }
     setRenderedMovies(firstBundle);
+    setStatus("resolved");
   }, [foundMovies]);
 
   useEffect(() => {
@@ -112,7 +142,6 @@ export default function Movies() {
     };
   }, [foundMovies, renderedMovies]);
 
-  console.log(checked);
   useEffect(() => {
     if (movieQuery) {
       setStatus("pending");
@@ -151,6 +180,22 @@ export default function Movies() {
     }
   }, [movieQuery, checked]);
 
+  useEffect(() => {
+    auth
+      .getSavedMovies()
+      .then((res) => {
+        res.data.forEach(({ movieId }) => {
+          setSavedMoviesIdsArr((savedMovieIdsArr) => [
+            movieId,
+            ...savedMovieIdsArr,
+          ]);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className="movies">
       <header className="movies__header">
@@ -167,8 +212,12 @@ export default function Movies() {
         {status === "notFound" && (
           <h2 className="movies__not-found">Ничего не найдено</h2>
         )}
-        {(status === "resolved" || renderedMovies.length) && (
-          <MoviesCardList movies={renderedMovies} />
+        {status === "resolved" && (
+          <MoviesCardList
+            movies={renderedMovies}
+            onCardLike={toggleLikeMovie}
+            savedMovieIdsArr={savedMovieIdsArr}
+          />
         )}
         {renderedMovies && renderedMovies.length < foundMovies.length && (
           <AddMoreBtn onAddMovies={handleAddMovies} />
