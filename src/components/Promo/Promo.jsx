@@ -2,20 +2,15 @@ import "./Promo.css";
 import mainLogo from "../../images/main-img.png";
 import Header from "../Header/Header";
 import NavTab from "../NavTab/NavTab";
+import Navigation from "../Navigation/Navigation";
 
-export default function Promo() {
+export default function Promo({ loggedIn }) {
   return (
     <header className="promo">
       <div className="promo__container">
-        <Header>
-          <NavTab />
-        </Header>
+        <Header>{loggedIn ? <Navigation /> : <NavTab />}</Header>
         <div className="promo__content">
-          <img
-            className="promo__image"
-            src={mainLogo}
-            alt="главный логотип"
-          />
+          <img className="promo__image" src={mainLogo} alt="главный логотип" />
           <h1 className="promo__title">
             Учебный проект студента факультета Веб-разработки.
           </h1>

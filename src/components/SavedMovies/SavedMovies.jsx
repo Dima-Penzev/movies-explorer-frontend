@@ -8,6 +8,8 @@ import { getSavedMovies } from "../../utils/MainApi";
 import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
 import * as auth from "../../utils/MainApi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SavedMovies() {
   const [movieQuery, setMovieQuery] = useState("");
@@ -15,13 +17,18 @@ export default function SavedMovies() {
   const [foundMovies, setFoundMovies] = useState([]);
   const [renderedMovies, setRenderedMovies] = useState([]);
   const [status, setStatus] = useState("idle");
+  const notifyEmptyQuery = () => toast.error("Нужно ввести ключевое слово.");
 
-  function handleSearchMovies(query, shortMovieChecked) {
+  function handleSearchSavedMovies(query, shortMovieChecked) {
+    if (query === "") {
+      notifyEmptyQuery();
+      return;
+    }
     setMovieQuery(query);
     setChecked(shortMovieChecked);
   }
 
-  function handleShortMovies(shortMovieChecked) {
+  function handleShortSavedMovies(shortMovieChecked) {
     setChecked(shortMovieChecked);
   }
 
@@ -51,37 +58,6 @@ export default function SavedMovies() {
   }, []);
 
   useEffect(() => {
-    if (movieQuery) {
-      setStatus("pending");
-      const normalizedQuery = movieQuery.toLowerCase();
-
-      const filteredMovies = foundMovies.filter(
-        ({ nameRU, nameEN, duration }) => {
-          if (checked) {
-            return (
-              (nameRU.includes(normalizedQuery) ||
-                nameEN.includes(normalizedQuery)) &&
-              duration <= 40
-            );
-          } else {
-            return (
-              nameRU.includes(normalizedQuery) ||
-              nameEN.includes(normalizedQuery)
-            );
-          }
-        }
-      );
-
-      if (!filteredMovies.length) {
-        setStatus("notFound");
-      } else {
-        setStatus("resolved");
-        setFoundMovies(filteredMovies);
-      }
-    }
-  }, [movieQuery, checked, foundMovies]);
-
-  useEffect(() => {
     let firstBundle;
 
     if (document.documentElement.clientWidth < 768) {
@@ -95,7 +71,6 @@ export default function SavedMovies() {
       firstBundle = foundMovies && foundMovies.slice(0, 12);
     }
     setRenderedMovies(firstBundle);
-    // setStatus("resolved");
   }, [foundMovies]);
 
   useEffect(() => {
@@ -138,6 +113,37 @@ export default function SavedMovies() {
     };
   }, [foundMovies, renderedMovies]);
 
+  useEffect(() => {
+    setStatus("pending");
+    const normalizedQuery = movieQuery.toLowerCase();
+
+    const filteredMovies = foundMovies.filter(
+      ({ nameRU, nameEN, duration }) => {
+        if (checked) {
+          return (
+            (nameRU.includes(normalizedQuery) ||
+              nameEN.includes(normalizedQuery)) &&
+            duration <= 40
+          );
+        } else {
+          return (
+            nameRU.includes(normalizedQuery) || nameEN.includes(normalizedQuery)
+          );
+        }
+      }
+    );
+
+    if (!filteredMovies.length) {
+      setStatus("notFound");
+    } else {
+      setStatus("resolved");
+      setRenderedMovies(filteredMovies);
+    }
+  }, [movieQuery, checked]);
+  console.log(foundMovies);
+  console.log(checked);
+  console.log(movieQuery);
+
   return (
     <div className="movies">
       <header className="movies__header">
@@ -147,8 +153,8 @@ export default function SavedMovies() {
       </header>
       <main className="movies__container movies__container_saved">
         <SearchForm
-          onSearchMovies={handleSearchMovies}
-          onShortMovies={handleShortMovies}
+          onSearchMovies={handleSearchSavedMovies}
+          onShortMovies={handleShortSavedMovies}
         />
         {status === "pending" && <Preloader />}
         {status === "resolved" && renderedMovies.length > 0 && (
@@ -157,11 +163,26 @@ export default function SavedMovies() {
             onDeleteCard={handleDeleteMovie}
           />
         )}
+        {status === "notFound" && (
+          <h2 className="movies__not-found">Ничего не найдено</h2>
+        )}
         {!renderedMovies.length && status !== "pending" && (
           <h2 className="movies__not-found">Нет сохраненных фильмов</h2>
         )}
       </main>
       <Footer />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }

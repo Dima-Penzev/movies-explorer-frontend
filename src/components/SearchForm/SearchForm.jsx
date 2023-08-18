@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "./SearchForm.css";
 
 export default function SearchForm({ onSearchMovies, onShortMovies }) {
+  const location = useLocation();
   const [formFilm, setFormFilm] = useState(
-    localStorage.getItem("movie-query") ?? ""
+    location.pathname === "/movies" ? localStorage.getItem("movie-query") : ""
   );
   const [checked, setChecked] = useState(
-    JSON.parse(localStorage.getItem("short-movie-checked")) ?? false
+    location.pathname === "/movies"
+      ? JSON.parse(localStorage.getItem("short-movie-checked"))
+      : false
   );
 
   useEffect(() => {
@@ -32,6 +36,7 @@ export default function SearchForm({ onSearchMovies, onShortMovies }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     onSearchMovies(formFilm, checked);
   };
 
