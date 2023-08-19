@@ -12,11 +12,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function SavedMovies() {
-  const [movieQuery, setMovieQuery] = useState("");
-  const [checked, setChecked] = useState(false);
   const [foundMovies, setFoundMovies] = useState([]);
   const [renderedMovies, setRenderedMovies] = useState([]);
-  const [status, setStatus] = useState("idle");
+  const [showLoader, setShowLoader] = useState(false);
+  const [movieQuery, setMovieQuery] = useState("");
+  const [checked, setChecked] = useState(false);
   const notifyEmptyQuery = () => toast.error("Нужно ввести ключевое слово.");
 
   function handleSearchSavedMovies(query, shortMovieChecked) {
@@ -36,9 +36,7 @@ export default function SavedMovies() {
     auth
       .deleteMovie(movieId)
       .then(() => {
-        setRenderedMovies((state) =>
-          state.filter((m) => m.movieId !== movieId)
-        );
+        setFoundMovies((state) => state.filter((m) => m.movieId !== movieId));
       })
       .catch((err) => {
         console.log(err);
@@ -46,10 +44,10 @@ export default function SavedMovies() {
   }
 
   useEffect(() => {
-    setStatus("pending");
+    setShowLoader(true);
     getSavedMovies()
       .then((response) => {
-        setStatus("resolved");
+        setShowLoader(false);
         setFoundMovies(response.data);
       })
       .catch((err) => {
@@ -114,7 +112,6 @@ export default function SavedMovies() {
   }, [foundMovies, renderedMovies]);
 
   useEffect(() => {
-    setStatus("pending");
     const normalizedQuery = movieQuery.toLowerCase();
 
     const filteredMovies = foundMovies.filter(
@@ -137,16 +134,8 @@ export default function SavedMovies() {
       }
     );
 
-    if (filteredMovies.length) {
-      setStatus("resolved");
-      setRenderedMovies(filteredMovies);
-    } else {
-      setStatus("notFound");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [movieQuery, checked]);
-  console.log(Boolean(foundMovies.length));
-  console.log(!foundMovies);
+    setRenderedMovies(filteredMovies);
+  }, [movieQuery, checked, foundMovies]);
 
   return (
     <div className="movies">
@@ -160,17 +149,17 @@ export default function SavedMovies() {
           onSearchMovies={handleSearchSavedMovies}
           onShortMovies={handleShortSavedMovies}
         />
-        {status === "pending" && <Preloader />}
-        {status === "resolved" && renderedMovies.length > 0 && (
+        {showLoader && <Preloader />}
+        {renderedMovies.length > 0 && (
           <MoviesCardList
             movies={renderedMovies}
             onDeleteCard={handleDeleteMovie}
           />
         )}
-        {status === "notFound" && (
+        {renderedMovies.length === 0 && (movieQuery || checked) && (
           <h2 className="movies__not-found">Ничего не найдено</h2>
         )}
-        {!foundMovies.length && (
+        {foundMovies.length === 0 && !showLoader && (
           <h2 className="movies__not-found">Нет сохраненных фильмов</h2>
         )}
       </main>
