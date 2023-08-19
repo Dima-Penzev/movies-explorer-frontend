@@ -15,6 +15,7 @@ import * as auth from "../../utils/MainApi";
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({ name: "", email: "" });
+  const [serverError, setServerError] = useState(null);
   const [status, setStatus] = useState("idle");
   const navigate = useNavigate();
 
@@ -29,7 +30,7 @@ function App() {
         }
       })
       .catch((err) => {
-        console.dir(err);
+        console.log(err);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -37,10 +38,12 @@ function App() {
   function handleRegister(name, email, password) {
     auth
       .register(name, email, password)
-      .then(() => {
-        navigate("/signin", { replace: true });
+      .then((res) => {
+        console.log(res);
+        handleLogin(email, password);
       })
       .catch((err) => {
+        setServerError(err);
         console.log(err);
       });
   }
@@ -48,11 +51,16 @@ function App() {
   function handleLogin(userEmail, userPassword) {
     auth
       .login(userEmail, userPassword)
-      .then(() => {
+      .then((res) => {
+        console.log("Получилось!!!");
+        setCurrentUser({ name: res.data.name, email: res.data.email });
         setLoggedIn(true);
         navigate("/movies", { replace: true });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setServerError(err);
+        console.log(err);
+      });
   }
 
   function handelUpdateUserData(userName, userEmail) {
@@ -70,6 +78,23 @@ function App() {
       });
   }
 
+  function handleLogout() {
+    setStatus("pending");
+
+    auth
+      .logout()
+      .then(() => {
+        setStatus("resolved");
+        console.log("OUT");
+        navigate("/signin", { replace: true });
+      })
+      .catch((err) => {
+        setStatus("rejected");
+        setServerError(err);
+        console.log(err);
+      });
+  }
+
   return (
     <div className="app">
       <CurrentUserContext.Provider value={currentUser}>
@@ -77,9 +102,14 @@ function App() {
           <Route path="/" element={<Main loggedIn={loggedIn} />} />
           <Route
             path="/signup"
-            element={<Register onRegister={handleRegister} />}
+            element={
+              <Register onRegister={handleRegister} serverError={serverError} />
+            }
           />
-          <Route path="/signin" element={<Login onLogin={handleLogin} />} />
+          <Route
+            path="/signin"
+            element={<Login onLogin={handleLogin} serverError={serverError} />}
+          />
           <Route
             path="/profile"
             element={
@@ -88,6 +118,8 @@ function App() {
                 loggedIn={loggedIn}
                 onUpdateUser={handelUpdateUserData}
                 status={status}
+                onLogout={handleLogout}
+                serverError={serverError}
               />
             }
           />

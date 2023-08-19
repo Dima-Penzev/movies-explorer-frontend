@@ -1,38 +1,27 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import logo from "../../images/logo.svg";
 import "../Register/Register.css";
 
-export default function Login({ onLogin }) {
-  const [formEmail, setFormEmail] = useState("");
-  const [formPassword, setFormPassword] = useState("");
+export default function Login({ onLogin, serverError }) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm({ mode: "onChange" });
+
+  const handleFormSubmit = ({ email, password }) => {
+    onLogin(email, password);
+  };
 
   useEffect(() => {
-    setFormEmail("");
-    setFormPassword("");
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.currentTarget;
-
-    switch (name) {
-      case "email":
-        setFormEmail(value);
-        break;
-
-      case "password":
-        setFormPassword(value);
-        break;
-
-      default:
-        break;
+    if (!serverError) {
+      reset();
     }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onLogin(formEmail, formPassword);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverError]);
 
   return (
     <div className="entry">
@@ -40,7 +29,11 @@ export default function Login({ onLogin }) {
         <img className="entry__logo" src={logo} alt="логотип" />
       </Link>
       <h2 className="entry__title">Рады видеть!</h2>
-      <form className="entry__form" name="profile-data" onSubmit={handleSubmit}>
+      <form
+        className="entry__form"
+        name="profile-data"
+        onSubmit={handleSubmit(handleFormSubmit)}
+      >
         <div>
           <label className="entry__label">
             E-mail
@@ -48,12 +41,16 @@ export default function Login({ onLogin }) {
               className="entry__input"
               placeholder="E-mail"
               type="email"
-              name="email"
-              required
-              value={formEmail}
-              onChange={handleChange}
+              {...register("email", {
+                required: "Заполните это поле",
+                pattern: {
+                  value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+                  message:
+                    "Email должен содержать символы: '@' и '.' Пример: 'xxx@xxx.xxx'",
+                },
+              })}
             />
-            <span className="entry__error">Что-то пошло не так...</span>
+            <span className="entry__error">{errors.email?.message}</span>
           </label>
           <label className="entry__label">
             Пароль
@@ -61,18 +58,27 @@ export default function Login({ onLogin }) {
               className="entry__input"
               placeholder="Пароль"
               type="password"
-              name="password"
-              minLength="8"
-              required
-              value={formPassword}
-              onChange={handleChange}
+              {...register("password", {
+                required: "Заполните это поле",
+                minLength: {
+                  value: 8,
+                  message: "Пароль должен быть не менее 8 символов",
+                },
+              })}
             />
-            <span className="entry__error">Что-то пошло не так...</span>
+            <span className="entry__error">{errors.password?.message}</span>
           </label>
         </div>
-        <button type="submit" className="entry__button">
-          Войти
-        </button>
+        <div>
+          {serverError && <p className="entry__server-error">{serverError}</p>}
+          <button
+            type="submit"
+            className={`entry__button ${!isValid && "entry__button_disabled"}`}
+            disabled={!isValid}
+          >
+            Войти
+          </button>
+        </div>
       </form>
       <p className="entry__text">
         Ещё не зарегистрированы?{" "}

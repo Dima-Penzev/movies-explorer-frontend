@@ -37,6 +37,7 @@ export default function MoviesCard({
     setIsLiked(
       savedMovieIdsArr && savedMovieIdsArr.includes(cardId) ? true : false
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedMovieIdsArr]);
 
   return (

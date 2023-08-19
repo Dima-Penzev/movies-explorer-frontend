@@ -90,6 +90,12 @@
   line-height: normal;
 }
 
+.entry__server-error {
+  margin-top: 0;
+  text-align: center;
+  color: #ee3465;
+}
+
 .entry__button {
   text-decoration: none;
   display: block;
@@ -114,6 +120,12 @@
 .entry__button:hover,
 .entry__button:focus {
   opacity: 0.8;
+}
+
+.entry__button_disabled {
+  background-color: #343434;
+  opacity: 0.8;
+  cursor: auto;
 }
 
 .entry__text {

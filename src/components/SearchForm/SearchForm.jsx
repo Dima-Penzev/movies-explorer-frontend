@@ -15,6 +15,7 @@ export default function SearchForm({ onSearchMovies, onShortMovies }) {
 
   useEffect(() => {
     onShortMovies(checked);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checked]);
 
   const handleChange = (e) => {

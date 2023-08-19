@@ -151,16 +151,19 @@ export default function Movies() {
         .then((response) => {
           const filteredMovies = response.filter(
             ({ nameRU, nameEN, duration }) => {
+              const normalizedNameRU = nameRU.toLowerCase();
+              const normalizedNameEN = nameEN.toLowerCase();
+
               if (checked) {
                 return (
-                  (nameRU.includes(normalizedQuery) ||
-                    nameEN.includes(normalizedQuery)) &&
+                  (normalizedNameRU.includes(normalizedQuery) ||
+                    normalizedNameEN.includes(normalizedQuery)) &&
                   duration <= 40
                 );
               } else {
                 return (
-                  nameRU.includes(normalizedQuery) ||
-                  nameEN.includes(normalizedQuery)
+                  normalizedNameRU.includes(normalizedQuery) ||
+                  normalizedNameEN.includes(normalizedQuery)
                 );
               }
             }
@@ -219,9 +222,10 @@ export default function Movies() {
             savedMovieIdsArr={savedMovieIdsArr}
           />
         )}
-        {renderedMovies && renderedMovies.length < foundMovies.length && (
-          <AddMoreBtn onAddMovies={handleAddMovies} />
-        )}
+        {status === "resolved" &&
+          renderedMovies.length < foundMovies.length && (
+            <AddMoreBtn onAddMovies={handleAddMovies} />
+          )}
       </main>
       <Footer />
       <ToastContainer

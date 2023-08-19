@@ -119,30 +119,34 @@ export default function SavedMovies() {
 
     const filteredMovies = foundMovies.filter(
       ({ nameRU, nameEN, duration }) => {
+        const normalizedNameRU = nameRU.toLowerCase();
+        const normalizedNameEN = nameEN.toLowerCase();
+
         if (checked) {
           return (
-            (nameRU.includes(normalizedQuery) ||
-              nameEN.includes(normalizedQuery)) &&
+            (normalizedNameRU.includes(normalizedQuery) ||
+              normalizedNameEN.includes(normalizedQuery)) &&
             duration <= 40
           );
         } else {
           return (
-            nameRU.includes(normalizedQuery) || nameEN.includes(normalizedQuery)
+            normalizedNameRU.includes(normalizedQuery) ||
+            normalizedNameEN.includes(normalizedQuery)
           );
         }
       }
     );
 
-    if (!filteredMovies.length) {
-      setStatus("notFound");
-    } else {
+    if (filteredMovies.length) {
       setStatus("resolved");
       setRenderedMovies(filteredMovies);
+    } else {
+      setStatus("notFound");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movieQuery, checked]);
-  console.log(foundMovies);
-  console.log(checked);
-  console.log(movieQuery);
+  console.log(Boolean(foundMovies.length));
+  console.log(!foundMovies);
 
   return (
     <div className="movies">
@@ -166,7 +170,7 @@ export default function SavedMovies() {
         {status === "notFound" && (
           <h2 className="movies__not-found">Ничего не найдено</h2>
         )}
-        {!renderedMovies.length && status !== "pending" && (
+        {!foundMovies.length && (
           <h2 className="movies__not-found">Нет сохраненных фильмов</h2>
         )}
       </main>

@@ -1,44 +1,27 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import logo from "../../images/logo.svg";
 import "./Register.css";
 
-export default function Register({ onRegister }) {
-  const [formName, setFormName] = useState("");
-  const [formEmail, setFormEmail] = useState("");
-  const [formPassword, setFormPassword] = useState("");
+export default function Register({ onRegister, serverError }) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isValid },
+  } = useForm({ mode: "onChange" });
+
+  const handleFormSubmit = ({ username, email, password }) => {
+    onRegister(username, email, password);
+  };
 
   useEffect(() => {
-    setFormName("");
-    setFormEmail("");
-    setFormPassword("");
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.currentTarget;
-
-    switch (name) {
-      case "username":
-        setFormName(value);
-        break;
-
-      case "email":
-        setFormEmail(value);
-        break;
-
-      case "password":
-        setFormPassword(value);
-        break;
-
-      default:
-        break;
+    if (!serverError) {
+      reset();
     }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onRegister(formName, formEmail, formPassword);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serverError]);
 
   return (
     <div className="entry">
@@ -46,7 +29,11 @@ export default function Register({ onRegister }) {
         <img className="entry__logo" src={logo} alt="логотип" />
       </Link>
       <h2 className="entry__title">Добро пожаловать!</h2>
-      <form className="entry__form" name="profile-data" onSubmit={handleSubmit}>
+      <form
+        className="entry__form"
+        name="profile-data"
+        onSubmit={handleSubmit(handleFormSubmit)}
+      >
         <div>
           <label className="entry__label">
             Имя
@@ -54,14 +41,24 @@ export default function Register({ onRegister }) {
               className="entry__input"
               placeholder="Имя"
               type="text"
-              name="username"
-              minLength="2"
-              maxLength="30"
-              required
-              value={formName}
-              onChange={handleChange}
+              {...register("username", {
+                required: "Заполните это поле",
+                minLength: {
+                  value: 2,
+                  message: "Имя должно быть не менее 2 символов",
+                },
+                maxLength: {
+                  value: 30,
+                  message: "Имя должно быть не более 30 символов",
+                },
+                pattern: {
+                  value: /^[A-Za-zА-Яа-я/ /-]+$/i,
+                  message:
+                    "Имя должно содержать только латиницу, кириллицу, пробел или дефис",
+                },
+              })}
             />
-            <span className="entry__error">Что-то пошло не так...</span>
+            <span className="entry__error">{errors.username?.message}</span>
           </label>
           <label className="entry__label">
             E-mail
@@ -69,12 +66,16 @@ export default function Register({ onRegister }) {
               className="entry__input"
               placeholder="E-mail"
               type="email"
-              name="email"
-              required
-              value={formEmail}
-              onChange={handleChange}
+              {...register("email", {
+                required: "Заполните это поле",
+                pattern: {
+                  value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+                  message:
+                    "Email должен содержать символы: '@' и '.' Пример: 'xxx@xxx.xxx'",
+                },
+              })}
             />
-            <span className="entry__error">Что-то пошло не так...</span>
+            <span className="entry__error">{errors.email?.message}</span>
           </label>
           <label className="entry__label">
             Пароль
@@ -82,18 +83,27 @@ export default function Register({ onRegister }) {
               className="entry__input"
               placeholder="Пароль"
               type="password"
-              name="password"
-              minLength="8"
-              required
-              value={formPassword}
-              onChange={handleChange}
+              {...register("password", {
+                required: "Заполните это поле",
+                minLength: {
+                  value: 8,
+                  message: "Пароль должен быть не менее 8 символов",
+                },
+              })}
             />
-            <span className="entry__error">Что-то пошло не так...</span>
+            <span className="entry__error">{errors.password?.message}</span>
           </label>
         </div>
-        <button type="submit" className="entry__button">
-          Зарегистрироваться
-        </button>
+        <div>
+          {serverError && <p className="entry__server-error">{serverError}</p>}
+          <button
+            type="submit"
+            className={`entry__button ${!isValid && "entry__button_disabled"}`}
+            disabled={!isValid}
+          >
+            Зарегистрироваться
+          </button>
+        </div>
       </form>
       <p className="entry__text">
         Уже зарегестрированы?{" "}
