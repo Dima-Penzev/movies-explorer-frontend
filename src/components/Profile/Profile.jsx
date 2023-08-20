@@ -7,12 +7,7 @@ import "./Profile.css";
 import Navigation from "../Navigation/Navigation";
 import Preloader from "../Preloader/Preloader";
 
-export default function Profile({
-  onUpdateUser,
-  status,
-  onLogout,
-  serverError,
-}) {
+export default function Profile({ onUpdateUser, status, onLogout }) {
   const { name, email } = useContext(CurrentUserContext);
   const {
     register,

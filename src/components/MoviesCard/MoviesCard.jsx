@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./MoviesCard.css";
 import { useLocation } from "react-router-dom";
 
@@ -7,6 +8,7 @@ export default function MoviesCard({
   duration,
   image,
   cardId,
+  trailerLink,
   onCardLike,
   onDeleteCard,
   savedMovieIdsArr,
@@ -42,17 +44,19 @@ export default function MoviesCard({
 
   return (
     <li className="movies-card">
-      <div className="movies-card__container">
-        <h2 className="movies-card__title">{title}</h2>
-        <p className="movies-card__duration">{movieDuration}</p>
-      </div>
-      <div className="movies-card__image-thumb">
-        <img
-          className="movies-card__image"
-          src={`https://api.nomoreparties.co/${image}`}
-          alt={title}
-        />
-      </div>
+      <Link className="movies-card__link" to={trailerLink} target="_blank">
+        <div className="movies-card__container">
+          <h2 className="movies-card__title">{title}</h2>
+          <p className="movies-card__duration">{movieDuration}</p>
+        </div>
+        <div className="movies-card__image-thumb">
+          <img
+            className="movies-card__image"
+            src={`https://api.nomoreparties.co/${image}`}
+            alt={title}
+          />
+        </div>
+      </Link>
       <button
         className={`movies-card__button  ${
           isLiked &&

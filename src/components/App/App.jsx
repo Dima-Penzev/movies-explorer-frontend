@@ -11,6 +11,14 @@ import SavedMovies from "../SavedMovies/SavedMovies";
 import ProtectedRouteElement from "../ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import * as auth from "../../utils/MainApi";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  notifyCommonError,
+  notifyConflictError,
+  notifyUnauthorizedError,
+  notifyUpdataed,
+} from "../../notifications/notifications";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -38,13 +46,17 @@ function App() {
   function handleRegister(name, email, password) {
     auth
       .register(name, email, password)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         handleLogin(email, password);
       })
       .catch((err) => {
         setServerError(err);
-        console.log(err);
+        if (err === "Ошибка: 409") {
+          notifyConflictError();
+        } else {
+          notifyCommonError();
+          console.log(err);
+        }
       });
   }
 
@@ -52,14 +64,18 @@ function App() {
     auth
       .login(userEmail, userPassword)
       .then((res) => {
-        console.log("Получилось!!!");
         setCurrentUser({ name: res.data.name, email: res.data.email });
         setLoggedIn(true);
         navigate("/movies", { replace: true });
       })
       .catch((err) => {
         setServerError(err);
-        console.log(err);
+        if (err === "Ошибка: 401") {
+          notifyUnauthorizedError();
+        } else {
+          notifyCommonError();
+          console.log(err);
+        }
       });
   }
 
@@ -71,6 +87,7 @@ function App() {
       .then((res) => {
         setStatus("resolved");
         setCurrentUser({ name: res.data.name, email: res.data.email });
+        notifyUpdataed();
       })
       .catch((err) => {
         setStatus("rejected");
@@ -85,12 +102,14 @@ function App() {
       .logout()
       .then(() => {
         setStatus("resolved");
-        console.log("OUT");
-        navigate("/signin", { replace: true });
+        setLoggedIn(false);
+        localStorage.removeItem("movies-list");
+        localStorage.removeItem("movie-query");
+        localStorage.removeItem("short-movie-checked");
+        navigate("/", { replace: true });
       })
       .catch((err) => {
         setStatus("rejected");
-        setServerError(err);
         console.log(err);
       });
   }
@@ -119,7 +138,6 @@ function App() {
                 onUpdateUser={handelUpdateUserData}
                 status={status}
                 onLogout={handleLogout}
-                serverError={serverError}
               />
             }
           />
@@ -141,6 +159,18 @@ function App() {
           <Route path="/*" element={<UnknownPath />} />
         </Routes>
       </CurrentUserContext.Provider>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }

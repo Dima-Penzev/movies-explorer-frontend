@@ -5,10 +5,13 @@ import "./SearchForm.css";
 export default function SearchForm({ onSearchMovies, onShortMovies }) {
   const location = useLocation();
   const [formFilm, setFormFilm] = useState(
-    location.pathname === "/movies" ? localStorage.getItem("movie-query") : ""
+    location.pathname === "/movies" && localStorage.getItem("movie-query")
+      ? localStorage.getItem("movie-query")
+      : ""
   );
   const [checked, setChecked] = useState(
-    location.pathname === "/movies"
+    location.pathname === "/movies" &&
+      localStorage.getItem("short-movie-checked")
       ? JSON.parse(localStorage.getItem("short-movie-checked"))
       : false
   );

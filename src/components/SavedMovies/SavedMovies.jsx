@@ -8,8 +8,14 @@ import { getSavedMovies } from "../../utils/MainApi";
 import Footer from "../Footer/Footer";
 import Preloader from "../Preloader/Preloader";
 import * as auth from "../../utils/MainApi";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { filterMovies } from "../../utils/filterMovies";
+import {
+  notifyEmptyQuery,
+  notifyForbidenAction,
+  notifyCommonError,
+} from "../../notifications/notifications";
 
 export default function SavedMovies() {
   const [foundMovies, setFoundMovies] = useState([]);
@@ -17,7 +23,6 @@ export default function SavedMovies() {
   const [showLoader, setShowLoader] = useState(false);
   const [movieQuery, setMovieQuery] = useState("");
   const [checked, setChecked] = useState(false);
-  const notifyEmptyQuery = () => toast.error("Нужно ввести ключевое слово.");
 
   function handleSearchSavedMovies(query, shortMovieChecked) {
     if (query === "") {
@@ -39,7 +44,12 @@ export default function SavedMovies() {
         setFoundMovies((state) => state.filter((m) => m.movieId !== movieId));
       })
       .catch((err) => {
-        console.log(err);
+        if (err === "Ошибка: 403") {
+          notifyForbidenAction();
+        } else {
+          notifyCommonError();
+          console.log(err);
+        }
       });
   }
 
@@ -51,88 +61,14 @@ export default function SavedMovies() {
         setFoundMovies(response.data);
       })
       .catch((err) => {
+        notifyCommonError();
         console.log(err);
       });
   }, []);
 
   useEffect(() => {
-    let firstBundle;
-
-    if (document.documentElement.clientWidth < 768) {
-      firstBundle = foundMovies && foundMovies.slice(0, 5);
-    } else if (
-      document.documentElement.clientWidth >= 768 &&
-      document.documentElement.clientWidth < 1280
-    ) {
-      firstBundle = foundMovies && foundMovies.slice(0, 8);
-    } else if (document.documentElement.clientWidth >= 1280) {
-      firstBundle = foundMovies && foundMovies.slice(0, 12);
-    }
-    setRenderedMovies(firstBundle);
-  }, [foundMovies]);
-
-  useEffect(() => {
-    const onResize = () => {
-      setTimeout(() => {
-        let firstBundle;
-        if (
-          document.documentElement.clientWidth < 768 &&
-          renderedMovies &&
-          renderedMovies.length <= 5
-        ) {
-          firstBundle = foundMovies && foundMovies.slice(0, 5);
-        } else if (
-          document.documentElement.clientWidth >= 768 &&
-          document.documentElement.clientWidth < 1280 &&
-          renderedMovies &&
-          renderedMovies.length <= 8
-        ) {
-          firstBundle = foundMovies && foundMovies.slice(0, 8);
-        } else if (
-          document.documentElement.clientWidth >= 1280 &&
-          renderedMovies &&
-          renderedMovies.length <= 12
-        ) {
-          firstBundle = foundMovies && foundMovies.slice(0, 12);
-        } else {
-          return;
-        }
-
-        if (firstBundle) {
-          setRenderedMovies(firstBundle);
-        }
-      }, 1000);
-    };
-
-    window.addEventListener("resize", onResize);
-
-    return () => {
-      window.removeEventListener("resize", onResize);
-    };
-  }, [foundMovies, renderedMovies]);
-
-  useEffect(() => {
     const normalizedQuery = movieQuery.toLowerCase();
-
-    const filteredMovies = foundMovies.filter(
-      ({ nameRU, nameEN, duration }) => {
-        const normalizedNameRU = nameRU.toLowerCase();
-        const normalizedNameEN = nameEN.toLowerCase();
-
-        if (checked) {
-          return (
-            (normalizedNameRU.includes(normalizedQuery) ||
-              normalizedNameEN.includes(normalizedQuery)) &&
-            duration <= 40
-          );
-        } else {
-          return (
-            normalizedNameRU.includes(normalizedQuery) ||
-            normalizedNameEN.includes(normalizedQuery)
-          );
-        }
-      }
-    );
+    const filteredMovies = filterMovies(foundMovies, normalizedQuery, checked);
 
     setRenderedMovies(filteredMovies);
   }, [movieQuery, checked, foundMovies]);
@@ -166,7 +102,7 @@ export default function SavedMovies() {
       <Footer />
       <ToastContainer
         position="top-center"
-        autoClose={3000}
+        autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

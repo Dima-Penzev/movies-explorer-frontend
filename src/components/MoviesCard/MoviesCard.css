@@ -5,6 +5,10 @@
   cursor: pointer;
 }
 
+.movies-card__link {
+  text-decoration: none;
+}
+
 .movies-card__container {
   display: flex;
   align-items: center;

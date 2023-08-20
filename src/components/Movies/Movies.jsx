@@ -9,8 +9,16 @@ import SearchForm from "../SearchForm/SearchForm";
 import { getMovies } from "../../utils/MoviesApi";
 import * as auth from "../../utils/MainApi";
 import "./Movies.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { filterMovies } from "../../utils/filterMovies";
+import { handleRenderedMovies } from "../../utils/handleRenderedMovies";
+import { createInitialMoviesArr } from "../../utils/createInitialMoviesArr";
+import {
+  notifyEmptyQuery,
+  notifyCommonError,
+  notifyForbidenAction,
+} from "../../notifications/notifications";
 
 export default function Movies() {
   const [foundMovies, setFoundMovies] = useState(
@@ -23,7 +31,6 @@ export default function Movies() {
   const [savedMovieIdsArr, setSavedMoviesIdsArr] = useState([]);
   const [checked, setChecked] = useState(false);
   const [status, setStatus] = useState("idle");
-  const notifyEmptyQuery = () => toast.error("Нужно ввести ключевое слово.");
 
   function handleAddMovies() {
     if (document.documentElement.clientWidth < 1280) {
@@ -69,6 +76,7 @@ export default function Movies() {
           ]);
         })
         .catch((err) => {
+          notifyCommonError();
           console.log(err);
         });
     } else {
@@ -80,57 +88,29 @@ export default function Movies() {
           );
         })
         .catch((err) => {
-          console.log(err);
+          if (err === "Ошибка: 403") {
+            notifyForbidenAction();
+          } else {
+            notifyCommonError();
+            console.log(err);
+          }
         });
     }
   }
 
   useEffect(() => {
-    let firstBundle;
+    const initialMoviesBundle = createInitialMoviesArr(foundMovies);
 
-    if (document.documentElement.clientWidth < 768) {
-      firstBundle = foundMovies && foundMovies.slice(0, 5);
-    } else if (
-      document.documentElement.clientWidth >= 768 &&
-      document.documentElement.clientWidth < 1280
-    ) {
-      firstBundle = foundMovies && foundMovies.slice(0, 8);
-    } else if (document.documentElement.clientWidth >= 1280) {
-      firstBundle = foundMovies && foundMovies.slice(0, 12);
-    }
-    setRenderedMovies(firstBundle);
-    setStatus("resolved");
+    setRenderedMovies(initialMoviesBundle);
   }, [foundMovies]);
 
   useEffect(() => {
     const onResize = () => {
       setTimeout(() => {
-        let firstBundle;
-        if (
-          document.documentElement.clientWidth < 768 &&
-          renderedMovies &&
-          renderedMovies.length <= 5
-        ) {
-          firstBundle = foundMovies && foundMovies.slice(0, 5);
-        } else if (
-          document.documentElement.clientWidth >= 768 &&
-          document.documentElement.clientWidth < 1280 &&
-          renderedMovies &&
-          renderedMovies.length <= 8
-        ) {
-          firstBundle = foundMovies && foundMovies.slice(0, 8);
-        } else if (
-          document.documentElement.clientWidth >= 1280 &&
-          renderedMovies &&
-          renderedMovies.length <= 12
-        ) {
-          firstBundle = foundMovies && foundMovies.slice(0, 12);
-        } else {
-          return;
-        }
+        const moviesBundle = handleRenderedMovies(foundMovies, renderedMovies);
 
-        if (firstBundle) {
-          setRenderedMovies(firstBundle);
+        if (moviesBundle) {
+          setRenderedMovies(moviesBundle);
         }
       }, 1000);
     };
@@ -149,24 +129,10 @@ export default function Movies() {
 
       getMovies()
         .then((response) => {
-          const filteredMovies = response.filter(
-            ({ nameRU, nameEN, duration }) => {
-              const normalizedNameRU = nameRU.toLowerCase();
-              const normalizedNameEN = nameEN.toLowerCase();
-
-              if (checked) {
-                return (
-                  (normalizedNameRU.includes(normalizedQuery) ||
-                    normalizedNameEN.includes(normalizedQuery)) &&
-                  duration <= 40
-                );
-              } else {
-                return (
-                  normalizedNameRU.includes(normalizedQuery) ||
-                  normalizedNameEN.includes(normalizedQuery)
-                );
-              }
-            }
+          const filteredMovies = filterMovies(
+            response,
+            normalizedQuery,
+            checked
           );
 
           if (!filteredMovies.length) {
@@ -178,6 +144,7 @@ export default function Movies() {
           }
         })
         .catch((err) => {
+          notifyCommonError();
           console.log(err);
         });
     }
@@ -195,6 +162,7 @@ export default function Movies() {
         });
       })
       .catch((err) => {
+        notifyCommonError();
         console.log(err);
       });
   }, []);
@@ -230,7 +198,7 @@ export default function Movies() {
       <Footer />
       <ToastContainer
         position="top-center"
-        autoClose={3000}
+        autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
