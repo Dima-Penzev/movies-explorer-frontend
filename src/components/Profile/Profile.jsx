@@ -12,6 +12,7 @@ export default function Profile({ onUpdateUser, status, onLogout }) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange",
@@ -21,6 +22,9 @@ export default function Profile({ onUpdateUser, status, onLogout }) {
     },
   });
   const [showEditor, setShowEditor] = useState(false);
+  const [dataMatch, setDataMatch] = useState(false);
+  const usernameInputValue = watch("username");
+  const emailInputValue = watch("email");
 
   const handleFormSubmit = ({ username, email }) => {
     onUpdateUser(username, email);
@@ -29,6 +33,12 @@ export default function Profile({ onUpdateUser, status, onLogout }) {
   const handleLogout = () => {
     onLogout();
   };
+
+  useEffect(() => {
+    setDataMatch(
+      name === usernameInputValue && email === emailInputValue ? true : false
+    );
+  }, [name, email, usernameInputValue, emailInputValue]);
 
   useEffect(() => {
     if (status === "resolved") {
@@ -116,9 +126,9 @@ export default function Profile({ onUpdateUser, status, onLogout }) {
           )}
           <button
             className={`profile__btn-save ${
-              !isValid && "profile__button_disabled"
+              (!isValid || dataMatch) && "profile__button_disabled"
             }`}
-            disabled={!isValid}
+            disabled={!isValid || dataMatch}
             form="profile"
             type="submit"
           >

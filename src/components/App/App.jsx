@@ -22,7 +22,11 @@ import {
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState({ name: "", email: "" });
+  const [currentUser, setCurrentUser] = useState({
+    name: "",
+    email: "",
+    userId: "",
+  });
   const [serverError, setServerError] = useState(null);
   const [status, setStatus] = useState("idle");
   const navigate = useNavigate();
@@ -32,7 +36,11 @@ function App() {
       .getContent()
       .then((res) => {
         if (res) {
-          setCurrentUser({ name: res.data.name, email: res.data.email });
+          setCurrentUser({
+            name: res.data.name,
+            email: res.data.email,
+            userId: res.data._id,
+          });
           setLoggedIn(true);
           navigate("/movies", { replace: true });
         }
@@ -64,7 +72,11 @@ function App() {
     auth
       .login(userEmail, userPassword)
       .then((res) => {
-        setCurrentUser({ name: res.data.name, email: res.data.email });
+        setCurrentUser({
+          name: res.data.name,
+          email: res.data.email,
+          userId: res.data._id,
+        });
         setLoggedIn(true);
         navigate("/movies", { replace: true });
       })
@@ -85,8 +97,13 @@ function App() {
     auth
       .updateUserData(userName, userEmail)
       .then((res) => {
+        console.log(res.data);
         setStatus("resolved");
-        setCurrentUser({ name: res.data.name, email: res.data.email });
+        setCurrentUser({
+          name: res.data.name,
+          email: res.data.email,
+          userId: res.data._id,
+        });
         notifyUpdataed();
       })
       .catch((err) => {

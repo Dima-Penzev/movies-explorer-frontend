@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../Movies/Movies.css";
 import Header from "../Header/Header";
 import Navigation from "../Navigation/Navigation";
@@ -13,19 +13,22 @@ import "react-toastify/dist/ReactToastify.css";
 import { filterMovies } from "../../utils/filterMovies";
 import {
   notifyEmptyQuery,
-  notifyForbidenAction,
   notifyCommonError,
 } from "../../notifications/notifications";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { useLocation } from "react-router-dom";
 
 export default function SavedMovies() {
+  const { userId } = useContext(CurrentUserContext);
   const [foundMovies, setFoundMovies] = useState([]);
   const [renderedMovies, setRenderedMovies] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [movieQuery, setMovieQuery] = useState("");
   const [checked, setChecked] = useState(false);
+  const { pathname } = useLocation();
 
   function handleSearchSavedMovies(query, shortMovieChecked) {
-    if (query === "") {
+    if (query === "" && pathname === "/movies") {
       notifyEmptyQuery();
       return;
     }
@@ -44,12 +47,8 @@ export default function SavedMovies() {
         setFoundMovies((state) => state.filter((m) => m.movieId !== movieId));
       })
       .catch((err) => {
-        if (err === "Ошибка: 403") {
-          notifyForbidenAction();
-        } else {
-          notifyCommonError();
-          console.log(err);
-        }
+        notifyCommonError();
+        console.log(err);
       });
   }
 
@@ -57,13 +56,18 @@ export default function SavedMovies() {
     setShowLoader(true);
     getSavedMovies()
       .then((response) => {
+        const ownedMovies = response.data.filter(
+          ({ owner }) => owner._id === userId
+        );
+        console.log(ownedMovies);
         setShowLoader(false);
-        setFoundMovies(response.data);
+        setFoundMovies(ownedMovies);
       })
       .catch((err) => {
         notifyCommonError();
         console.log(err);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

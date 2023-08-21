@@ -17,20 +17,19 @@ import { createInitialMoviesArr } from "../../utils/createInitialMoviesArr";
 import {
   notifyEmptyQuery,
   notifyCommonError,
-  notifyForbidenAction,
 } from "../../notifications/notifications";
 
 export default function Movies() {
   const [foundMovies, setFoundMovies] = useState(
-    JSON.parse(localStorage.getItem("movies-list")) ?? []
+    localStorage.getItem("movies-list")
+      ? JSON.parse(localStorage.getItem("movies-list"))
+      : []
   );
   const [renderedMovies, setRenderedMovies] = useState([]);
-  const [movieQuery, setMovieQuery] = useState(
-    localStorage.getItem("movie-query") ?? null
-  );
   const [savedMovieIdsArr, setSavedMoviesIdsArr] = useState([]);
-  const [checked, setChecked] = useState(false);
-  const [status, setStatus] = useState("idle");
+  const [status, setStatus] = useState(
+    localStorage.getItem("movies-list") ? "resolved" : "idle"
+  );
 
   function handleAddMovies() {
     if (document.documentElement.clientWidth < 1280) {
@@ -53,14 +52,32 @@ export default function Movies() {
       notifyEmptyQuery();
       return;
     }
-    setMovieQuery(query);
-    localStorage.setItem("movie-query", query);
-    handleShortMovies(shortMovieChecked);
-  }
+    setStatus("pending");
+    const normalizedQuery = query.toLowerCase();
 
-  function handleShortMovies(shortMovieChecked) {
-    setChecked(shortMovieChecked);
-    localStorage.setItem("short-movie-checked", shortMovieChecked);
+    getMovies()
+      .then((response) => {
+        const filteredMovies = filterMovies(
+          response,
+          normalizedQuery,
+          shortMovieChecked
+        );
+        console.log(filteredMovies);
+
+        if (!filteredMovies.length) {
+          setStatus("notFound");
+        } else {
+          setStatus("resolved");
+          setFoundMovies(filteredMovies);
+          localStorage.setItem("movie-query", normalizedQuery);
+          localStorage.setItem("short-movie-checked", shortMovieChecked);
+          localStorage.setItem("movies-list", JSON.stringify(filteredMovies));
+        }
+      })
+      .catch((err) => {
+        notifyCommonError();
+        console.log(err);
+      });
   }
 
   function toggleLikeMovie(movieId, movieLike) {
@@ -88,12 +105,8 @@ export default function Movies() {
           );
         })
         .catch((err) => {
-          if (err === "Ошибка: 403") {
-            notifyForbidenAction();
-          } else {
-            notifyCommonError();
-            console.log(err);
-          }
+          notifyCommonError();
+          console.log(err);
         });
     }
   }
@@ -123,34 +136,6 @@ export default function Movies() {
   }, [foundMovies, renderedMovies]);
 
   useEffect(() => {
-    if (movieQuery) {
-      setStatus("pending");
-      const normalizedQuery = movieQuery.toLowerCase();
-
-      getMovies()
-        .then((response) => {
-          const filteredMovies = filterMovies(
-            response,
-            normalizedQuery,
-            checked
-          );
-
-          if (!filteredMovies.length) {
-            setStatus("notFound");
-          } else {
-            setStatus("resolved");
-            setFoundMovies(filteredMovies);
-            localStorage.setItem("movies-list", JSON.stringify(filteredMovies));
-          }
-        })
-        .catch((err) => {
-          notifyCommonError();
-          console.log(err);
-        });
-    }
-  }, [movieQuery, checked]);
-
-  useEffect(() => {
     auth
       .getSavedMovies()
       .then((res) => {
@@ -166,6 +151,8 @@ export default function Movies() {
         console.log(err);
       });
   }, []);
+  // console.log(foundMovies);
+  // console.log(renderedMovies);
 
   return (
     <div className="movies">
@@ -175,10 +162,7 @@ export default function Movies() {
         </Header>
       </header>
       <main className="movies__container">
-        <SearchForm
-          onSearchMovies={handleSearchMovies}
-          onShortMovies={handleShortMovies}
-        />
+        <SearchForm onSearchMovies={handleSearchMovies} />
         {status === "pending" && <Preloader />}
         {status === "notFound" && (
           <h2 className="movies__not-found">Ничего не найдено</h2>

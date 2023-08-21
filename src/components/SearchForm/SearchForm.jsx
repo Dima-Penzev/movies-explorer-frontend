@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./SearchForm.css";
 
-export default function SearchForm({ onSearchMovies, onShortMovies }) {
+export default function SearchForm({ onSearchMovies }) {
   const location = useLocation();
   const [formFilm, setFormFilm] = useState(
     location.pathname === "/movies" && localStorage.getItem("movie-query")
@@ -16,11 +16,6 @@ export default function SearchForm({ onSearchMovies, onShortMovies }) {
       : false
   );
 
-  useEffect(() => {
-    onShortMovies(checked);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checked]);
-
   const handleChange = (e) => {
     const { name, value } = e.currentTarget;
 
@@ -30,7 +25,10 @@ export default function SearchForm({ onSearchMovies, onShortMovies }) {
         break;
 
       case "short-movies":
-        setChecked(!checked);
+        setChecked((checked) => {
+          onSearchMovies(formFilm, !checked);
+          return !checked;
+        });
         break;
 
       default:
