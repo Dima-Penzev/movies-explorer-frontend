@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./SearchForm.css";
 
-export default function SearchForm({ onSearchMovies }) {
+export default function SearchForm({ onSearchMovies, onShortMovies, status }) {
   const location = useLocation();
   const [formFilm, setFormFilm] = useState(
     location.pathname === "/movies" && localStorage.getItem("movie-query")
@@ -25,10 +25,7 @@ export default function SearchForm({ onSearchMovies }) {
         break;
 
       case "short-movies":
-        setChecked((checked) => {
-          onSearchMovies(formFilm, !checked);
-          return !checked;
-        });
+        setChecked(!checked);
         break;
 
       default:
@@ -42,6 +39,11 @@ export default function SearchForm({ onSearchMovies }) {
     onSearchMovies(formFilm, checked);
   };
 
+  useEffect(() => {
+    onShortMovies(checked);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checked]);
+
   return (
     <form className="search-form" onSubmit={handleSubmit}>
       <div className="search-form__container">
@@ -53,7 +55,13 @@ export default function SearchForm({ onSearchMovies }) {
           value={formFilm}
           onChange={handleChange}
         />
-        <button className="search-form__button" type="submit">
+        <button
+          disabled={status === "pending"}
+          className={`search-form__button ${
+            status === "pending" && "search-form__button-disabled"
+          }`}
+          type="submit"
+        >
           Поиск
         </button>
       </div>

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import logo from "../../images/logo.svg";
 import "./Register.css";
 
-export default function Register({ onRegister, serverError }) {
+export default function Register({ onRegister, serverError, status }) {
   const {
     register,
     handleSubmit,
@@ -13,6 +13,7 @@ export default function Register({ onRegister, serverError }) {
   } = useForm({ mode: "onChange" });
 
   const handleFormSubmit = ({ username, email, password }) => {
+    console.log("push");
     onRegister(username, email, password);
   };
 
@@ -99,7 +100,7 @@ export default function Register({ onRegister, serverError }) {
           <button
             type="submit"
             className={`entry__button ${!isValid && "entry__button_disabled"}`}
-            disabled={!isValid}
+            disabled={!isValid || status === "pending"}
           >
             Зарегистрироваться
           </button>

@@ -45,6 +45,13 @@ export default function SavedMovies() {
       .deleteMovie(movieId)
       .then(() => {
         setFoundMovies((state) => state.filter((m) => m.movieId !== movieId));
+        const updatedIdsArr = JSON.parse(
+          localStorage.getItem("liked-movies-ids-arr")
+        ).filter((id) => id !== movieId);
+        localStorage.setItem(
+          "liked-movies-ids-arr",
+          JSON.stringify(updatedIdsArr)
+        );
       })
       .catch((err) => {
         notifyCommonError();
@@ -59,7 +66,6 @@ export default function SavedMovies() {
         const ownedMovies = response.data.filter(
           ({ owner }) => owner._id === userId
         );
-        console.log(ownedMovies);
         setShowLoader(false);
         setFoundMovies(ownedMovies);
       })
@@ -72,7 +78,7 @@ export default function SavedMovies() {
 
   useEffect(() => {
     const normalizedQuery = movieQuery.toLowerCase();
-    const filteredMovies = filterMovies(foundMovies, normalizedQuery, checked);
+    const filteredMovies = filterMovies(foundMovies, checked, normalizedQuery);
 
     setRenderedMovies(filteredMovies);
   }, [movieQuery, checked, foundMovies]);

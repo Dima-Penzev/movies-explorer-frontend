@@ -26,7 +26,11 @@ export default function Movies() {
       : []
   );
   const [renderedMovies, setRenderedMovies] = useState([]);
-  const [savedMovieIdsArr, setSavedMoviesIdsArr] = useState([]);
+  const [savedMovieIdsArr, setSavedMoviesIdsArr] = useState(
+    localStorage.getItem("liked-movies-ids-arr")
+      ? JSON.parse(localStorage.getItem("liked-movies-ids-arr"))
+      : []
+  );
   const [status, setStatus] = useState(
     localStorage.getItem("movies-list") ? "resolved" : "idle"
   );
@@ -59,10 +63,9 @@ export default function Movies() {
       .then((response) => {
         const filteredMovies = filterMovies(
           response,
-          normalizedQuery,
-          shortMovieChecked
+          shortMovieChecked,
+          normalizedQuery
         );
-        console.log(filteredMovies);
 
         if (!filteredMovies.length) {
           setStatus("notFound");
@@ -75,9 +78,25 @@ export default function Movies() {
         }
       })
       .catch((err) => {
+        setStatus("rejected");
         notifyCommonError();
         console.log(err);
       });
+  }
+
+  function handleSearchShortMovies(shortMovieChecked) {
+    if (foundMovies.length > 0) {
+      const filteredMovies = shortMovieChecked
+        ? foundMovies.filter(({ duration }) => duration <= 40)
+        : foundMovies;
+
+      if (!filteredMovies.length) {
+        setStatus("notFound");
+      } else {
+        setStatus("resolved");
+        setRenderedMovies(filteredMovies);
+      }
+    }
   }
 
   function toggleLikeMovie(movieId, movieLike) {
@@ -136,23 +155,24 @@ export default function Movies() {
   }, [foundMovies, renderedMovies]);
 
   useEffect(() => {
-    auth
-      .getSavedMovies()
-      .then((res) => {
-        res.data.forEach(({ movieId }) => {
-          setSavedMoviesIdsArr((savedMovieIdsArr) => [
-            movieId,
-            ...savedMovieIdsArr,
-          ]);
+    if (savedMovieIdsArr.length === 0 && renderedMovies.length !== 0) {
+      auth
+        .getSavedMovies()
+        .then((res) => {
+          res.data.forEach(({ movieId }) => {
+            setSavedMoviesIdsArr((state) => [movieId, ...state]);
+          });
+        })
+        .catch((err) => {
+          notifyCommonError();
+          console.log(err);
         });
-      })
-      .catch((err) => {
-        notifyCommonError();
-        console.log(err);
-      });
-  }, []);
-  // console.log(foundMovies);
-  // console.log(renderedMovies);
+    }
+    localStorage.setItem(
+      "liked-movies-ids-arr",
+      JSON.stringify(savedMovieIdsArr)
+    );
+  }, [savedMovieIdsArr, renderedMovies]);
 
   return (
     <div className="movies">
@@ -162,7 +182,11 @@ export default function Movies() {
         </Header>
       </header>
       <main className="movies__container">
-        <SearchForm onSearchMovies={handleSearchMovies} />
+        <SearchForm
+          onSearchMovies={handleSearchMovies}
+          onShortMovies={handleSearchShortMovies}
+          status={status}
+        />
         {status === "pending" && <Preloader />}
         {status === "notFound" && (
           <h2 className="movies__not-found">Ничего не найдено</h2>

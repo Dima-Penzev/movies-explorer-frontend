@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import logo from "../../images/logo.svg";
 import "../Register/Register.css";
 
-export default function Login({ onLogin, serverError }) {
+export default function Login({ onLogin, serverError, status }) {
   const {
     register,
     handleSubmit,
@@ -74,7 +74,7 @@ export default function Login({ onLogin, serverError }) {
           <button
             type="submit"
             className={`entry__button ${!isValid && "entry__button_disabled"}`}
-            disabled={!isValid}
+            disabled={!isValid || status === "pending"}
           >
             Войти
           </button>

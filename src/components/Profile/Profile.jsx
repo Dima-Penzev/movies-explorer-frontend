@@ -128,7 +128,7 @@ export default function Profile({ onUpdateUser, status, onLogout }) {
             className={`profile__btn-save ${
               (!isValid || dataMatch) && "profile__button_disabled"
             }`}
-            disabled={!isValid || dataMatch}
+            disabled={!isValid || dataMatch || status === "pending"}
             form="profile"
             type="submit"
           >

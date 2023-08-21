@@ -51,13 +51,17 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleRegister(name, email, password) {
+  function handleRegister(name, email, password, registerBtnRef) {
+    setStatus("pending");
+
     auth
       .register(name, email, password)
       .then(() => {
+        setStatus("resolved");
         handleLogin(email, password);
       })
       .catch((err) => {
+        setStatus("rejected");
         setServerError(err);
         if (err === "Ошибка: 409") {
           notifyConflictError();
@@ -69,9 +73,12 @@ function App() {
   }
 
   function handleLogin(userEmail, userPassword) {
+    setStatus("pending");
+
     auth
       .login(userEmail, userPassword)
       .then((res) => {
+        setStatus("resolved");
         setCurrentUser({
           name: res.data.name,
           email: res.data.email,
@@ -81,6 +88,7 @@ function App() {
         navigate("/movies", { replace: true });
       })
       .catch((err) => {
+        setStatus("rejected");
         setServerError(err);
         if (err === "Ошибка: 401") {
           notifyUnauthorizedError();
@@ -97,7 +105,6 @@ function App() {
     auth
       .updateUserData(userName, userEmail)
       .then((res) => {
-        console.log(res.data);
         setStatus("resolved");
         setCurrentUser({
           name: res.data.name,
@@ -108,6 +115,7 @@ function App() {
       })
       .catch((err) => {
         setStatus("rejected");
+        notifyCommonError();
         console.log(err);
       });
   }
@@ -123,10 +131,12 @@ function App() {
         localStorage.removeItem("movies-list");
         localStorage.removeItem("movie-query");
         localStorage.removeItem("short-movie-checked");
+        localStorage.removeItem("liked-movies-ids-arr");
         navigate("/", { replace: true });
       })
       .catch((err) => {
         setStatus("rejected");
+        notifyCommonError();
         console.log(err);
       });
   }
@@ -139,12 +149,22 @@ function App() {
           <Route
             path="/signup"
             element={
-              <Register onRegister={handleRegister} serverError={serverError} />
+              <Register
+                onRegister={handleRegister}
+                serverError={serverError}
+                status={status}
+              />
             }
           />
           <Route
             path="/signin"
-            element={<Login onLogin={handleLogin} serverError={serverError} />}
+            element={
+              <Login
+                onLogin={handleLogin}
+                serverError={serverError}
+                status={status}
+              />
+            }
           />
           <Route
             path="/profile"

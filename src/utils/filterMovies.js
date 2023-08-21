@@ -1,4 +1,4 @@
-export function filterMovies(moviesArr, movieQuery, shortMovieChecked) {
+export function filterMovies(moviesArr, shortMovieChecked, movieQuery) {
   return moviesArr.filter(({ nameRU, nameEN, duration }) => {
     const normalizedNameRU = nameRU.toLowerCase();
     const normalizedNameEN = nameEN.toLowerCase();
