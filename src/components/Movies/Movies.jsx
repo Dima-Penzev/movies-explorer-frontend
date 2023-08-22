@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import AddMoreBtn from "../AddMoreBtn/AddMoreBtn";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { filterMovies } from "../../utils/filterMovies";
 import { handleRenderedMovies } from "../../utils/handleRenderedMovies";
 import { createInitialMoviesArr } from "../../utils/createInitialMoviesArr";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import {
   notifyEmptyQuery,
   notifyCommonError,
@@ -26,7 +27,7 @@ export default function Movies() {
       : []
   );
   const [renderedMovies, setRenderedMovies] = useState([]);
-  const [savedMovieIdsArr, setSavedMoviesIdsArr] = useState(
+  const [savedMovieArr, setSavedMoviesArr] = useState(
     localStorage.getItem("liked-movies-ids-arr")
       ? JSON.parse(localStorage.getItem("liked-movies-ids-arr"))
       : []
@@ -34,6 +35,7 @@ export default function Movies() {
   const [status, setStatus] = useState(
     localStorage.getItem("movies-list") ? "resolved" : "idle"
   );
+  const { userId } = useContext(CurrentUserContext);
 
   function handleAddMovies() {
     if (document.documentElement.clientWidth < 1280) {
@@ -99,17 +101,18 @@ export default function Movies() {
     }
   }
 
-  function toggleLikeMovie(movieId, movieLike) {
+  function toggleLikeMovie(cardId, movieLike) {
+    const movie =
+      savedMovieArr && savedMovieArr.find(({ movieId }) => movieId === cardId);
+    const movieId = movie && movieLike ? movie._id : cardId;
+
     if (!movieLike) {
       const likedMovie = renderedMovies.find(({ id }) => movieId === id);
 
       auth
         .saveMovie(likedMovie)
-        .then(() => {
-          setSavedMoviesIdsArr((savedMovieIdsArr) => [
-            movieId,
-            ...savedMovieIdsArr,
-          ]);
+        .then((res) => {
+          setSavedMoviesArr((state) => [res.data, ...state]);
         })
         .catch((err) => {
           notifyCommonError();
@@ -119,8 +122,10 @@ export default function Movies() {
       auth
         .deleteMovie(movieId)
         .then(() => {
-          setSavedMoviesIdsArr((savedMovieIdsArr) =>
-            savedMovieIdsArr.filter((id) => id !== movieId)
+          console.log(movieId);
+          console.log(movieLike);
+          setSavedMoviesArr((state) =>
+            state.filter((movie) => movie._id !== movieId)
           );
         })
         .catch((err) => {
@@ -155,12 +160,14 @@ export default function Movies() {
   }, [foundMovies, renderedMovies]);
 
   useEffect(() => {
-    if (savedMovieIdsArr.length === 0 && renderedMovies.length !== 0) {
+    if (savedMovieArr.length === 0 && renderedMovies.length !== 0) {
       auth
         .getSavedMovies()
         .then((res) => {
-          res.data.forEach(({ movieId }) => {
-            setSavedMoviesIdsArr((state) => [movieId, ...state]);
+          res.data.forEach((movie) => {
+            if (movie.owner._id === userId) {
+              setSavedMoviesArr((state) => [movie, ...state]);
+            }
           });
         })
         .catch((err) => {
@@ -168,11 +175,9 @@ export default function Movies() {
           console.log(err);
         });
     }
-    localStorage.setItem(
-      "liked-movies-ids-arr",
-      JSON.stringify(savedMovieIdsArr)
-    );
-  }, [savedMovieIdsArr, renderedMovies]);
+    localStorage.setItem("liked-movies-ids-arr", JSON.stringify(savedMovieArr));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [savedMovieArr, renderedMovies]);
 
   return (
     <div className="movies">
@@ -195,7 +200,7 @@ export default function Movies() {
           <MoviesCardList
             movies={renderedMovies}
             onCardLike={toggleLikeMovie}
-            savedMovieIdsArr={savedMovieIdsArr}
+            savedMovieArr={savedMovieArr}
           />
         )}
         {status === "resolved" &&

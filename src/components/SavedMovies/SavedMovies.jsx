@@ -40,14 +40,25 @@ export default function SavedMovies() {
     setChecked(shortMovieChecked);
   }
 
-  function handleDeleteMovie(movieId) {
+  function handleDeleteMovie(cardId) {
+    const savedMoviesArr = JSON.parse(
+      localStorage.getItem("liked-movies-ids-arr")
+    );
+
+    const movie =
+      savedMoviesArr &&
+      savedMoviesArr.find(({ movieId }) => movieId === cardId);
+    const movieId = movie && movie._id;
+
     auth
       .deleteMovie(movieId)
       .then(() => {
-        setFoundMovies((state) => state.filter((m) => m.movieId !== movieId));
-        const updatedIdsArr = JSON.parse(
-          localStorage.getItem("liked-movies-ids-arr")
-        ).filter((id) => id !== movieId);
+        setFoundMovies((state) =>
+          state.filter((movie) => movie._id !== movieId)
+        );
+        const updatedIdsArr = savedMoviesArr.filter(
+          (movie) => movie._id !== movieId
+        );
         localStorage.setItem(
           "liked-movies-ids-arr",
           JSON.stringify(updatedIdsArr)

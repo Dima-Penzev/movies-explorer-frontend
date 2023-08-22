@@ -5,7 +5,7 @@ export default function MoviesCardList({
   movies,
   onCardLike,
   onDeleteCard,
-  savedMovieIdsArr,
+  savedMovieArr,
 }) {
   return (
     <ul className="movies-card-list">
@@ -20,7 +20,7 @@ export default function MoviesCardList({
             trailerLink={trailerLink}
             onCardLike={onCardLike}
             onDeleteCard={onDeleteCard}
-            savedMovieIdsArr={savedMovieIdsArr}
+            savedMovieArr={savedMovieArr}
           />
         ))}
     </ul>

@@ -11,7 +11,7 @@ export default function MoviesCard({
   trailerLink,
   onCardLike,
   onDeleteCard,
-  savedMovieIdsArr,
+  savedMovieArr,
 }) {
   const [isLiked, setIsLiked] = useState(false);
   const movieDuration = timeConvert(duration);
@@ -36,11 +36,18 @@ export default function MoviesCard({
   }
 
   useEffect(() => {
-    setIsLiked(
-      savedMovieIdsArr && savedMovieIdsArr.includes(cardId) ? true : false
-    );
+    if (savedMovieArr) {
+      savedMovieArr.forEach(({ movieId }) => {
+        console.log("asdf");
+        if (movieId !== cardId) {
+          return;
+        }
+        setIsLiked(true);
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [savedMovieIdsArr]);
+  }, [savedMovieArr]);
+  console.log(savedMovieArr);
 
   return (
     <li className="movies-card">
