@@ -175,7 +175,7 @@ export default function Movies() {
   }, [foundMovies, renderedMovies]);
 
   useEffect(() => {
-    if (savedMovieArr.length === 0 && renderedMovies.length !== 0) {
+    if (savedMovieArr.length === 0 && allMovies.length !== 0) {
       auth
         .getSavedMovies()
         .then((res) => {
@@ -189,9 +189,12 @@ export default function Movies() {
           console.log(err);
         });
     }
-    localStorage.setItem("liked-movies-arr", JSON.stringify(savedMovieArr));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [savedMovieArr, renderedMovies]);
+  }, [allMovies]);
+
+  useEffect(() => {
+    localStorage.setItem("liked-movies-arr", JSON.stringify(savedMovieArr));
+  }, [savedMovieArr]);
 
   return (
     <div className="movies">
