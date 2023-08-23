@@ -1,5 +1,4 @@
-// const BASE_URL = "https://api.explorer-movies.nomoreparties.sbs";
-const BASE_URL = "http://localhost:4000";
+const BASE_URL = "https://api.explorer-movies.nomoreparties.sbs";
 
 function requestData(url, option) {
   return fetch(url, option).then(getResponseData);
