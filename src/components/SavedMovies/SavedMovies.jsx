@@ -41,9 +41,7 @@ export default function SavedMovies() {
   }
 
   function handleDeleteMovie(cardId) {
-    const savedMoviesArr = JSON.parse(
-      localStorage.getItem("liked-movies-ids-arr")
-    );
+    const savedMoviesArr = JSON.parse(localStorage.getItem("liked-movies-arr"));
 
     const movie =
       savedMoviesArr &&
@@ -59,10 +57,7 @@ export default function SavedMovies() {
         const updatedIdsArr = savedMoviesArr.filter(
           (movie) => movie._id !== movieId
         );
-        localStorage.setItem(
-          "liked-movies-ids-arr",
-          JSON.stringify(updatedIdsArr)
-        );
+        localStorage.setItem("liked-movies-arr", JSON.stringify(updatedIdsArr));
       })
       .catch((err) => {
         notifyCommonError();
@@ -71,19 +66,28 @@ export default function SavedMovies() {
   }
 
   useEffect(() => {
-    setShowLoader(true);
-    getSavedMovies()
-      .then((response) => {
-        const ownedMovies = response.data.filter(
-          ({ owner }) => owner._id === userId
-        );
-        setShowLoader(false);
-        setFoundMovies(ownedMovies);
-      })
-      .catch((err) => {
-        notifyCommonError();
-        console.log(err);
-      });
+    const savedMovies =
+      localStorage.getItem("liked-movies-arr") &&
+      JSON.parse(localStorage.getItem("liked-movies-arr"));
+
+    if (savedMovies.length === 0) {
+      setShowLoader(true);
+      getSavedMovies()
+        .then((response) => {
+          const ownedMovies = response.data.filter(
+            ({ owner }) => owner._id === userId
+          );
+          setShowLoader(false);
+          setFoundMovies(ownedMovies);
+          localStorage.setItem("liked-movies-arr", JSON.stringify(ownedMovies));
+        })
+        .catch((err) => {
+          notifyCommonError();
+          console.log(err);
+        });
+    } else {
+      setFoundMovies(savedMovies);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

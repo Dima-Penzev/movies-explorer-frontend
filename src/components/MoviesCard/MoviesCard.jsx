@@ -37,17 +37,12 @@ export default function MoviesCard({
 
   useEffect(() => {
     if (savedMovieArr) {
-      savedMovieArr.forEach(({ movieId }) => {
-        console.log("asdf");
-        if (movieId !== cardId) {
-          return;
-        }
-        setIsLiked(true);
-      });
+      const likedMovie = savedMovieArr.find(
+        ({ movieId }) => movieId === cardId
+      );
+      setIsLiked(likedMovie ? true : false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [savedMovieArr]);
-  console.log(savedMovieArr);
+  }, [savedMovieArr, cardId]);
 
   return (
     <li className="movies-card">

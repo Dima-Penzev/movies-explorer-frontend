@@ -115,8 +115,12 @@ function App() {
       })
       .catch((err) => {
         setStatus("rejected");
-        notifyCommonError();
-        console.log(err);
+        if (err === "Ошибка: 409") {
+          notifyConflictError();
+        } else {
+          notifyCommonError();
+          console.log(err);
+        }
       });
   }
 
@@ -131,7 +135,8 @@ function App() {
         localStorage.removeItem("movies-list");
         localStorage.removeItem("movie-query");
         localStorage.removeItem("short-movie-checked");
-        localStorage.removeItem("liked-movies-ids-arr");
+        localStorage.removeItem("liked-movies-arr");
+        localStorage.removeItem("all-movies-list");
         navigate("/", { replace: true });
       })
       .catch((err) => {

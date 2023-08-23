@@ -21,6 +21,11 @@ import {
 } from "../../notifications/notifications";
 
 export default function Movies() {
+  const [allMovies, setAllMovies] = useState(
+    localStorage.getItem("all-movies-list")
+      ? JSON.parse(localStorage.getItem("all-movies-list"))
+      : []
+  );
   const [foundMovies, setFoundMovies] = useState(
     localStorage.getItem("movies-list")
       ? JSON.parse(localStorage.getItem("movies-list"))
@@ -28,12 +33,22 @@ export default function Movies() {
   );
   const [renderedMovies, setRenderedMovies] = useState([]);
   const [savedMovieArr, setSavedMoviesArr] = useState(
-    localStorage.getItem("liked-movies-ids-arr")
-      ? JSON.parse(localStorage.getItem("liked-movies-ids-arr"))
+    localStorage.getItem("liked-movies-arr")
+      ? JSON.parse(localStorage.getItem("liked-movies-arr"))
       : []
   );
   const [status, setStatus] = useState(
     localStorage.getItem("movies-list") ? "resolved" : "idle"
+  );
+  const [movieQuery, setMovieQuery] = useState(
+    localStorage.getItem("movie-query")
+      ? localStorage.getItem("movie-query")
+      : ""
+  );
+  const [checked, setChecked] = useState(
+    localStorage.getItem("short-movie-checked")
+      ? JSON.parse(localStorage.getItem("short-movie-checked"))
+      : false
   );
   const { userId } = useContext(CurrentUserContext);
 
@@ -58,47 +73,33 @@ export default function Movies() {
       notifyEmptyQuery();
       return;
     }
-    setStatus("pending");
+
     const normalizedQuery = query.toLowerCase();
 
-    getMovies()
-      .then((response) => {
-        const filteredMovies = filterMovies(
-          response,
-          shortMovieChecked,
-          normalizedQuery
-        );
+    if (normalizedQuery === movieQuery) {
+      return;
+    }
 
-        if (!filteredMovies.length) {
-          setStatus("notFound");
-        } else {
-          setStatus("resolved");
-          setFoundMovies(filteredMovies);
-          localStorage.setItem("movie-query", normalizedQuery);
-          localStorage.setItem("short-movie-checked", shortMovieChecked);
-          localStorage.setItem("movies-list", JSON.stringify(filteredMovies));
-        }
-      })
-      .catch((err) => {
-        setStatus("rejected");
-        notifyCommonError();
-        console.log(err);
-      });
+    setStatus("pending");
+    setMovieQuery(normalizedQuery);
+    setChecked(shortMovieChecked);
+
+    if (allMovies.length === 0) {
+      getMovies()
+        .then((response) => {
+          setAllMovies(response);
+          localStorage.setItem("all-movies-list", JSON.stringify(response));
+        })
+        .catch((err) => {
+          setStatus("rejected");
+          notifyCommonError();
+          console.log(err);
+        });
+    }
   }
 
   function handleSearchShortMovies(shortMovieChecked) {
-    if (foundMovies.length > 0) {
-      const filteredMovies = shortMovieChecked
-        ? foundMovies.filter(({ duration }) => duration <= 40)
-        : foundMovies;
-
-      if (!filteredMovies.length) {
-        setStatus("notFound");
-      } else {
-        setStatus("resolved");
-        setRenderedMovies(filteredMovies);
-      }
-    }
+    setChecked(shortMovieChecked);
   }
 
   function toggleLikeMovie(cardId, movieLike) {
@@ -122,8 +123,6 @@ export default function Movies() {
       auth
         .deleteMovie(movieId)
         .then(() => {
-          console.log(movieId);
-          console.log(movieLike);
           setSavedMoviesArr((state) =>
             state.filter((movie) => movie._id !== movieId)
           );
@@ -134,6 +133,22 @@ export default function Movies() {
         });
     }
   }
+
+  useEffect(() => {
+    if (allMovies.length > 0) {
+      const filteredMovies = filterMovies(allMovies, checked, movieQuery);
+
+      if (!filteredMovies.length) {
+        setStatus("notFound");
+      } else {
+        setStatus("resolved");
+        setFoundMovies(filteredMovies);
+        localStorage.setItem("movie-query", movieQuery);
+        localStorage.setItem("short-movie-checked", checked);
+        localStorage.setItem("movies-list", JSON.stringify(filteredMovies));
+      }
+    }
+  }, [allMovies, movieQuery, checked]);
 
   useEffect(() => {
     const initialMoviesBundle = createInitialMoviesArr(foundMovies);
@@ -164,18 +179,17 @@ export default function Movies() {
       auth
         .getSavedMovies()
         .then((res) => {
-          res.data.forEach((movie) => {
-            if (movie.owner._id === userId) {
-              setSavedMoviesArr((state) => [movie, ...state]);
-            }
-          });
+          const filteredMoviesArr = res.data.filter(
+            ({ owner }) => owner._id === userId
+          );
+          setSavedMoviesArr(filteredMoviesArr);
         })
         .catch((err) => {
           notifyCommonError();
           console.log(err);
         });
     }
-    localStorage.setItem("liked-movies-ids-arr", JSON.stringify(savedMovieArr));
+    localStorage.setItem("liked-movies-arr", JSON.stringify(savedMovieArr));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedMovieArr, renderedMovies]);
 
