@@ -6,10 +6,10 @@ import Promo from "../Promo/Promo";
 import Techs from "../Techs/Techs";
 import "./Main.css";
 
-export default function Main() {
+export default function Main({ loggedIn }) {
   return (
     <>
-      <Promo />
+      <Promo loggedIn={loggedIn} />
       <main className="main">
         <AboutProject />
         <Techs />

@@ -90,13 +90,18 @@
   line-height: normal;
 }
 
+.entry__server-error {
+  margin-top: 0;
+  text-align: center;
+  color: #ee3465;
+}
+
 .entry__button {
   text-decoration: none;
   display: block;
   margin: 0 auto;
   color: #fff;
   box-sizing: border-box;
-  padding-top: 15px;
   text-align: center;
   font-size: 12px;
   font-style: normal;
@@ -115,6 +120,12 @@
 .entry__button:hover,
 .entry__button:focus {
   opacity: 0.8;
+}
+
+.entry__button_disabled {
+  background-color: #343434;
+  opacity: 0.8;
+  cursor: auto;
 }
 
 .entry__text {
@@ -166,7 +177,6 @@
   }
 
   .entry__button {
-    padding-top: 13px;
     font-size: 14px;
   }
 

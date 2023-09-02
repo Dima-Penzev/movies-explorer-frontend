@@ -145,7 +145,7 @@
     min-height: 100%;
     max-width: max-content;
     box-sizing: border-box;
-    background-color: #202020;
+    background-color: transparent;
     display: block;
     padding: 0;
   }
