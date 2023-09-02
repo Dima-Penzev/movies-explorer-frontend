@@ -1,0 +1,180 @@
+.navigation__container {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 520px;
+  box-sizing: border-box;
+  background-color: #202020;
+  display: none;
+  grid-template-rows: auto auto auto 1fr;
+  justify-items: center;
+  padding-top: 144px;
+  padding-bottom: 48px;
+}
+
+.navigation__opened {
+  display: grid;
+}
+
+.navigation__menu {
+  width: 38px;
+  min-height: 38px;
+  background: transparent;
+  background-image: url(../../images/icon-menu.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  transition: opacity 250ms ease-in;
+}
+
+.navigation__menu:hover,
+.navigation__menu:focus {
+  opacity: 0.7;
+}
+
+.navigation__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background: transparent;
+  background-image: url(../../images/cross.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  transition: opacity 250ms ease-in;
+}
+.navigation__menu:hover,
+.navigation__menu:focus {
+  opacity: 0.7;
+}
+
+.navigation__link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding-bottom: 9px;
+  transition: opacity 250ms ease-in;
+}
+
+.navigation__link:hover,
+.navigation__link:focus {
+  opacity: 0.7;
+}
+
+.navigation__link:not(:first-of-type) {
+  margin-top: 15px;
+}
+
+.navigation__link_active {
+  position: relative;
+}
+
+.navigation__link_active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+}
+
+.navigation__account {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  color: #fff;
+  text-align: right;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  align-self: end;
+  transition: opacity 250ms ease-in;
+}
+
+.navigation__account:hover,
+.navigation__account:focus {
+  opacity: 0.7;
+}
+
+.navigation__avatar {
+  display: block;
+  width: 30px;
+  min-height: 30px;
+  text-align: center;
+  background-color: #313131;
+  border-radius: 6px;
+  padding-top: 8px;
+  margin-left: 13px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .navigation__container {
+    padding-top: 159px;
+    padding-bottom: 92px;
+  }
+
+  .navigation__menu {
+    width: 44px;
+    background-size: 48px;
+  }
+
+  .navigation__close {
+    top: 22px;
+    right: 22px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .navigation__container {
+    position: static;
+    min-height: 100%;
+    max-width: max-content;
+    box-sizing: border-box;
+    background-color: #202020;
+    display: block;
+    padding: 0;
+  }
+
+  .navigation__link {
+    text-align: right;
+    font-size: 14px;
+    line-height: 18px;
+    padding-bottom: 0;
+  }
+
+  .navigation__link_active {
+    font-weight: 500;
+  }
+
+  .navigation__link_active::after {
+    display: none;
+  }
+
+  .navigation__link:nth-of-type(3) {
+    margin-left: 20px;
+  }
+
+  .navigation__account {
+    margin-left: 50px;
+    line-height: 18px;
+  }
+
+  .navigation__invisible {
+    display: none;
+  }
+}
